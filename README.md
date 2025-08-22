@@ -2,7 +2,7 @@
 
 ### Colaboradores
 
-- [Nicaise Raphael](https://github.com/juanperez)
-- [Fernandez Felipe](https://github.com/mariagomez)
-- [Barbero Agus](https://github.com/luisrodriguez)
-- [Lopez Luciano](https://github.com/anamartinez)
+- [Nicaise Raphael](https://github.com/RaphaelNicaise)
+- [Fernandez Felipe](https://github.com/felifernandezz)
+- [Barbero Agus](https://github.com/agustinbarbero)
+- [Lopez Luciano](https://github.com/Luchoolopez)
