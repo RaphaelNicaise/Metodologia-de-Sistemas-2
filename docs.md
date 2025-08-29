@@ -68,3 +68,5 @@ Registro diario con filtros.
 # Dashboard
 
 # Configuración
+
+# Modulos transversales -> tickets, scanning, minio_storage
