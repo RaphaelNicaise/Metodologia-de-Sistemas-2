@@ -51,7 +51,7 @@ const Navbar = () => {
                 <div className="navbar-links">
                     <a href="#sucursales" className="nav-link">
                         <FaShop className="nav-icon"/>
-                        <span>Sucursales</span>
+                        <span>Local</span>
                     </a>
                     <a href="#empleados" className="nav-link">
                         <FaUserTie className="nav-icon"/>

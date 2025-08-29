@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Roboto Condensed", sans-serif;
+    background: #214998;   
+}
+
+.login-container {
+  background: #1c3c7d;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 170px;
+  height: 700px;
+  width: 500px;
+  color: white;
+  box-shadow:  20px 20px 60px #18336a,
+             -20px -20px 60px #204590;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  font-size: 40px;
+}
+
+/* Inputs flotantes */
+.user-box {
+  position: relative;
+  width: 350px;
+  margin-bottom: 30px;
+}
+
+.user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: white;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  outline: none;
+}
+
+.user-box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: white;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.user-box input:focus ~ label,
+.user-box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  font-size: 12px;
+  color: #fff;
+}
+
+/* Links y botones */
+.login-container-forgot {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.login-container-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.login-container-btn button {
+  margin-bottom: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: white;
+  color: #1c3c7d;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-container-btn button:hover {
+  background: #ddd;
+}
+
+.login-container a{
+    color: white;
+    text-decoration: none;
+}
