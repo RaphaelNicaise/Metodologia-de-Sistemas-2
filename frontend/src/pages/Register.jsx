@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Login.css";
+import '../styles/Register.css';
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,15 +12,24 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
-    navigate('/')
+    navigate('/iniciar-sesion')
   };
 
   return (
-    <div className="page-login">
-    <div className="login-container">
-      <h2>Iniciar sesión</h2>
+    <div className="register-page">
+    <div className="register-container">
+      <h2>Registrarse</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
+        <div className="user-box">
+          <input
+            type="text"
+            value={name}
+            onChange={(e)=>setName(e.target.value)}
+            required
+          />
+          <label>Nombre</label>
+        </div>
         <div className="user-box">
           <input
             type="email"
@@ -38,12 +48,9 @@ const Login = () => {
           />
           <label>Contraseña</label>
         </div>
-        <div className="login-container-forgot">
-          <a href="#">¿Olvidaste tu contraseña?</a>
-        </div>
-        <div className="login-container-btn">
-          <button type="submit">Iniciar sesión</button>
-          <a href="/registrarse">¿Todavía no tenés una cuenta?</a>
+        <div className="register-container-btn">
+          <button type="submit">Registrarse</button>
+          <a href="/iniciar-sesion">¿Ya tenes una cuenta?</a>
         </div>
       </form>
     </div>
@@ -51,4 +58,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Roboto Condensed", sans-serif;
+    background: #2651a9;
+}
+
+
+.register-container {
+    background: #1c3c7d;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 170px;
+    height: 700px;
+    width: 500px;
+    color: white;
+    box-shadow: 20px 20px 60px #18336a,
+        -20px -20px 60px #204590;
+
+}
+
+.register-container h2 {
+    margin-bottom: 20px;
+    font-size: 40px;
+}
+
+/* Inputs flotantes */
+.user-box {
+    position: relative;
+    width: 350px;
+    margin-bottom: 30px;
+}
+
+.user-box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 20px;
+    color: white;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    outline: none;
+}
+
+.user-box label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 20px;
+    color: white;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.user-box input:focus~label,
+.user-box input:valid~label {
+    top: -20px;
+    left: 0;
+    font-size: 12px;
+    color: #fff;
+}
+
+/* Links y botones */
+.register-container-forgot {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.register-container-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.register-container-btn button {
+    padding: 1em 2em;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #214998;
+    transition: all 1000ms;
+    font-size: 15px;
+    position: relative;
+    overflow: hidden;
+    outline: 2px solid #214998;
+}
+
+.register-container-btn button:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+    outline: 2px solid #70bdca;
+    box-shadow: 4px 5px 17px -4px #214998;
+}
+
+.register-container-btn button::before {
+    content: "";
+    position: absolute;
+    left: -50px;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background-color: #214998;
+    transform: skewX(45deg);
+    z-index: -1;
+    transition: width 1000ms;
+}
+
+.register-container-btn button:hover::before {
+    width: 250%;
+}
+
+.register-container-btn a {
+    padding-top: 20px;
+}
+
+.register-container a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
