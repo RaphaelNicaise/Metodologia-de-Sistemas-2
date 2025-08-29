@@ -10,8 +10,8 @@ services:
       - FLASK_APP=src/app.py
       - MONGO_URI=mongodb://mongo:27017/
       - MINIO_ENDPOINT=http://minio:9000
-      - MINIO_ROOT_USER=user
-      - MINIO_ROOT_PASSWORD=1234
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     command: python -m flask run --host=0.0.0.0 --port=5000 --reload
     depends_on:
       - mongo
@@ -36,8 +36,8 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=8yg89dfsygfgyy9ys98fdg
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     volumes:
       - 'minio_data:/data'
     networks:
