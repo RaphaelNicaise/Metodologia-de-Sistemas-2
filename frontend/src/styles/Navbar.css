@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.navbar-container {
+    background-color: #f8f9fa;
+    width: 280px;
+    height: 100vh;
+    padding: 20px 0;
+    border-right: 1px solid #e9ecef;
+    font-family: "Roboto Condensed", sans-serif;
+
+}
+
+.navbar-section {
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+.navbar-section-title {
+    color: #495057;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    padding-left: 10px;
+}
+
+.navbar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #2c3e50;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    background-color: #e9ecef;
+    transform: translateX(2px);
+}
+
+.nav-icon {
+    font-size: 18px;
+    color: #6c757d;
+    min-width: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-link span {
+    flex: 1;
+}
+
+/*
+.nav-link.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.nav-link.active .nav-icon {
+    color: white;
+}*/
