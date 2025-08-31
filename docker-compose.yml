@@ -12,10 +12,33 @@ services:
       - MINIO_ENDPOINT=minio:9000
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     command: python -m flask run --host=0.0.0.0 --port=5000 --reload
     depends_on:
       - mongo
       - minio
+      - mysql
+    networks:
+      - appnetwork
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public      
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - backend
     networks:
       - appnetwork
 
@@ -52,8 +75,10 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./db/sql/init.sql:/docker-entrypoint-initdb.d/init.sql    
     networks:
       - appnetwork
 
@@ -69,24 +94,6 @@ services:
       PMA_PORT: 3306
     networks:
       - appnetwork
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public      
-    command: ["npm", "run", "dev"]
-    depends_on:
-      - backend
-    networks:
-      - appnetwork
-
 
 networks:
   appnetwork:
