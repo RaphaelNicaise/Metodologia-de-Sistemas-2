@@ -1,7 +1,12 @@
 from flask import Blueprint, jsonify
 
-products_bp = Blueprint("products", __name__, url_prefix="/productos")
+from products.services.products_service import ProductoService
+
+
+products_bp = Blueprint("products", __name__)
+service = ProductoService()
 
 @products_bp.route("/", methods=["GET"])
 def get_products():
-    return jsonify({"Modulo de productos": "En construccion"}), 200
+    products = service.get_all_products()
+    return jsonify([product.to_dict() for product in products]), 200

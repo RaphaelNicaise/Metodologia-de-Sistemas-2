@@ -8,13 +8,17 @@ from src.sales.routes.sales_routes import sales_bp
 from src.users.routes.users_routes import users_bp
 
 from minio_storage import minio_service
+from db import Database
+
+Database() # crea la unica instancia Singleton de la base de datos
 
 app = Flask(__name__)
+
 
 # register blueprints
 app.register_blueprint(accounting_bp)
 app.register_blueprint(config_bp)
-app.register_blueprint(products_bp)
+app.register_blueprint(products_bp, url_prefix="/productos")
 app.register_blueprint(providers_bp)
 app.register_blueprint(sales_bp)
 app.register_blueprint(users_bp)
