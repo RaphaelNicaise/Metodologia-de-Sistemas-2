@@ -78,7 +78,8 @@ services:
       MYSQL_HOST: ${MYSQL_HOST}
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./db/sql/init.sql:/docker-entrypoint-initdb.d/init.sql    
+      - ./db/sql/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql    
+      - ./db/sql/02-init_data.sql:/docker-entrypoint-initdb.d/02-init_data.sql
     networks:
       - appnetwork
 
