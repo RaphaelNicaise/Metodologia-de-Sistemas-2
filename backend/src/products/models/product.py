@@ -1,14 +1,15 @@
 class Product:
-    def __init__(self, id=None, name=None ,barcode=None, price=None, stock=None,  category=None):
+    def __init__(self, id=None, name=None, barcode=None, price=None, stock=None, url_image=None):
         self.id = id
         self.name = name
         self.barcode = barcode
         self.price = price
         self.stock = stock
-        self.category = category
+        self.url_image = url_image
 
     def __repr__(self):
-        return f"Product(id={self.id}, name={self.name}, barcode={self.barcode}, price={self.price}, stock={self.stock}, category={self.category})"
+        return (f"Product(id={self.id}, name={self.name}, barcode={self.barcode}, price={self.price}, "
+                f"stock={self.stock},  url_image={self.url_image})")
 
     def to_dict(self):
         return {
@@ -17,7 +18,7 @@ class Product:
             "barcode": self.barcode,
             "price": self.price,
             "stock": self.stock,
-            "category": self.category
+            "url_image": self.url_image
         }
     
     @classmethod
@@ -28,5 +29,5 @@ class Product:
             barcode=data.get("barcode"),
             price=data.get("price"),
             stock=data.get("stock"),
-            category=data.get("category")
+            url_image=data.get("url_image")
         )
