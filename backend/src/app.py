@@ -18,7 +18,7 @@ app = Flask(__name__)
 # register blueprints
 app.register_blueprint(accounting_bp)
 app.register_blueprint(config_bp)
-app.register_blueprint(products_bp, url_prefix="/productos")
+app.register_blueprint(products_bp, url_prefix="/api/productos")
 app.register_blueprint(providers_bp)
 app.register_blueprint(sales_bp)
 app.register_blueprint(users_bp)
