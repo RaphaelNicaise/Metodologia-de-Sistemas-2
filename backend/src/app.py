@@ -7,14 +7,18 @@ from src.providers.routes.providers_routes import providers_bp
 from src.sales.routes.sales_routes import sales_bp
 from src.users.routes.users_routes import users_bp
 
-from minio_storage import minio_service
+from minio_storage.minio_service import MinioClient
+from db import Database
+
+Database() # instancia del cliente de MySQL
+MinioClient() # instancia el singleton de MinIO 
 
 app = Flask(__name__)
 
 # register blueprints
 app.register_blueprint(accounting_bp)
 app.register_blueprint(config_bp)
-app.register_blueprint(products_bp)
+app.register_blueprint(products_bp, url_prefix="/api/productos")
 app.register_blueprint(providers_bp)
 app.register_blueprint(sales_bp)
 app.register_blueprint(users_bp)

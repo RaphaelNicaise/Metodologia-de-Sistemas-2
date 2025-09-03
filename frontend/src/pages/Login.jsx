@@ -43,7 +43,6 @@ const Login = () => {
         </div>
         <div className="login-container-btn">
           <button type="submit">Iniciar sesión</button>
-          <a href="/registrarse">¿Todavía no tenés una cuenta?</a>
         </div>
       </form>
     </div>

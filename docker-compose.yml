@@ -8,26 +8,38 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_APP=src/app.py
-      - MONGO_URI=mongodb://mongo:27017/
       - MINIO_ENDPOINT=minio:9000
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     command: python -m flask run --host=0.0.0.0 --port=5000 --reload
     depends_on:
-      - mongo
       - minio
+      - mysql
     networks:
       - appnetwork
 
-  mongo:
-    image: mongo:7.0
-    container_name: mongodb
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "27017:27017"
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     volumes:
-      - mongo_data:/data/db
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public      
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - backend
     networks:
       - appnetwork
+
     
   minio:
     image: minio/minio:latest
@@ -52,8 +64,11 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./db/sql/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql    
+      - ./db/sql/02-init_data.sql:/docker-entrypoint-initdb.d/02-init_data.sql
     networks:
       - appnetwork
 
@@ -75,7 +90,6 @@ networks:
     driver: bridge
 
 volumes:
-  mongo_data:
   minio_data:
     driver: local
   mysql_data:

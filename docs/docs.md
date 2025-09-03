@@ -58,15 +58,44 @@ Efectivo, tarjeta, QR, billeteras virtuales.
 Registro diario con filtros.
 
 # Modulo de productos
+Gestion de Productos: Crud
+- Escaneo con lector de código de barras USB. 
+- Ingreso manual por:
+    - Código de barras.
+
+    - Nombre del producto.
+
+    - Proveedor.
+
+Gestion de Stock: ingresos
+Historial de movimientos
+Agregar stock
 
 # Modulo de proveedores
+CRUD
+Nombre
+Descripcion
+Numero
+Mail
+Direccion
 
 # Modulo de contabilidad
+Resumen cierre de caja, semanal y mensual, 
 
 # Modulo de usuarios y roles
 
+2 usuarios:
+    gestor de negocio:
+        superusuario
+    vendedor:
+        tiene acceso limitado a ciertas funcionalidades de la contabilidad, por ejemplo solo podria hacer los cierres de caja
+
+
 # Dashboard
+Analiticas del negocio
 
 # Configuración
+El admin del negocio va a poder crear usuarios vendedores.
+Tema oscuro y claro (a definir)
 
 # Modulos transversales -> tickets, scanning, minio_storage

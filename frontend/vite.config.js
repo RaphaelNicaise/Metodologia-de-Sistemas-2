@@ -6,5 +6,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     dedupe: ['react', 'react-dom'] //ayuda a evitar duplicados
-  }
+  },
+server: {
+  host: '0.0.0.0',
+  port: 5173,
+  watch: {
+    usePolling: true
+  }}
 })
+
