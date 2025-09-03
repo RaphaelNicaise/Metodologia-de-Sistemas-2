@@ -8,7 +8,6 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_APP=src/app.py
-      - MONGO_URI=mongodb://mongo:27017/
       - MINIO_ENDPOINT=minio:9000
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
@@ -19,7 +18,6 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     command: python -m flask run --host=0.0.0.0 --port=5000 --reload
     depends_on:
-      - mongo
       - minio
       - mysql
     networks:
@@ -42,15 +40,6 @@ services:
     networks:
       - appnetwork
 
-  mongo:
-    image: mongo:7.0
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - appnetwork
     
   minio:
     image: minio/minio:latest
@@ -101,7 +90,6 @@ networks:
     driver: bridge
 
 volumes:
-  mongo_data:
   minio_data:
     driver: local
   mysql_data:
