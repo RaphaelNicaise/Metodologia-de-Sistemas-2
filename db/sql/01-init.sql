@@ -1,8 +1,3 @@
-    -- 1. Categories
-    CREATE TABLE categories (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        name VARCHAR(100) NOT NULL UNIQUE
-    );
 
     -- 2. Products
     CREATE TABLE products (
@@ -11,9 +6,8 @@
         barcode VARCHAR(100),
         price DECIMAL(10,2) NOT NULL,
         stock INT NOT NULL DEFAULT 0,
-        image_url VARCHAR(255),
-        category_id INT,
-        FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+        url_image VARCHAR(255),
+        category varchar(100)
     );
 
     CREATE INDEX idx_products_name ON products(name);
