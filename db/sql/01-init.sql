@@ -3,7 +3,7 @@
     CREATE TABLE products (
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(255) UNIQUE NOT NULL,
-        barcode VARCHAR(100),
+        barcode VARCHAR(100) UNIQUE,
         price DECIMAL(10,2) NOT NULL,
         stock INT NOT NULL DEFAULT 0,
         url_image VARCHAR(255),
