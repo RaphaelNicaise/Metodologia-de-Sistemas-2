@@ -115,21 +115,21 @@
         FOREIGN KEY (sale_id) REFERENCES sales(id)
     );
 
--- 10. Stock Movements
-CREATE TABLE stock_movements (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    product_id INT NOT NULL,
-    movement_type ENUM('ingreso','devolucion') NOT NULL,
-    quantity INT NOT NULL,
-    movement_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    user_id INT,            -- who registered the movement
-    provider_id INT,        -- if the movement is related to a provider (e.g. purchase)
-    notes TEXT,             -- optional comments
-    
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
-    FOREIGN KEY (provider_id) REFERENCES providers(id) ON DELETE SET NULL
-);
+    -- 10. Stock Movements
+    CREATE TABLE stock_movements (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        product_id INT NOT NULL,
+        movement_type ENUM('ingreso','devolucion') NOT NULL,
+        quantity INT NOT NULL,
+        movement_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        user_id INT,            -- who registered the movement
+        provider_id INT,        -- if the movement is related to a provider (e.g. purchase)
+        notes TEXT,             -- optional comments
+        
+        FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+        FOREIGN KEY (provider_id) REFERENCES providers(id) ON DELETE SET NULL
+    );
 
 CREATE INDEX idx_stock_movements_product_id ON stock_movements(product_id);
 CREATE INDEX idx_stock_movements_date ON stock_movements(movement_date);
