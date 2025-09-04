@@ -25,3 +25,19 @@ class StockService:
         except Exception as e:
             print(e)
             return "ERROR"
+        
+    def get_movements(self, product_id):
+        product_query = "SELECT id FROM products WHERE id = %s"
+        cursor = self.db.execute(product_query, (product_id,))
+        if cursor.fetchone() is None:
+            return "NOT_FOUND"
+
+        movements_query = """
+        SELECT id, movement_type, movement_date, quantity, user_id, provider_id, notes
+        FROM stock_movements
+        WHERE product_id = %s
+        ORDER BY movement_date DESC
+        """
+        cursor = self.db.execute(movements_query, (product_id,))
+        movements = cursor.fetchall()
+        return movements

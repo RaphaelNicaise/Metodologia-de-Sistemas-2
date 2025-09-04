@@ -79,3 +79,12 @@ def add_stock(product_id):
         return jsonify({"error": "Error al agregar stock"}), 500
 
     return jsonify({"message": f"Se agregaron {quantity} unidades al stock"}), 200
+
+@products_bp.route("/<int:product_id>/stock", methods=["GET"])
+def get_stock_movements(product_id):
+    result = s_service.get_movements(product_id)
+
+    if result == "NOT_FOUND":
+        return jsonify({"error": "Producto no encontrado"}), 404
+
+    return jsonify(result), 200
