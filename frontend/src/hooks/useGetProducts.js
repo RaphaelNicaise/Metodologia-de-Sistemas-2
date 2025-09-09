@@ -1,4 +1,4 @@
-const { useState, useEffect } = require("react")
+import { useState, useEffect } from "react"
 
 const useGetProducts = () => {
     const [products, setProducts] = useState([]);
@@ -10,11 +10,15 @@ const useGetProducts = () => {
             try {
                 const res = await fetch("http://localhost:5000/api/productos", {
                     method: "GET",
+                    headers: {
+                        'Accept': 'application/json',
+                    }
                 });
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.message || "Error al obtener los posts");
+                if (!res.ok) throw new Error(`Error http: ${res.status} ${res.statusText}`);
                 setProducts(data || []);
             } catch (error) {
+                console.error("Error fetching products", error);
                 setError(error.message);
             } finally {
                 setLoading(false);

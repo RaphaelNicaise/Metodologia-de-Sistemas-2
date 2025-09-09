@@ -1,8 +1,8 @@
 import React from "react";
 
-const ProductCard = ({ name, barcode, price, stock, url_image, category}) => {
+const ProductCard = ({ id, name, barcode, price, stock, url_image, category}) => {
     return(
-        <div className="product-card">
+        <div className="product-card" key={id}>
             {url_image && url_image.length > 0 && (
                 <div className="product-image-container">
                     <img
