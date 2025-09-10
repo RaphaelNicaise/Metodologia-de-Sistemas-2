@@ -8,7 +8,7 @@ const useGetProducts = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/productos", {
+                const res = await fetch("http://localhost:5000/api/productos/", {
                     method: "GET",
                     headers: {
                         'Accept': 'application/json',
