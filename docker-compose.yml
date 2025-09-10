@@ -16,6 +16,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_TEST_DATABASE=${MYSQL_TEST_DATABASE}
     command: python -m flask run --host=0.0.0.0 --port=5000 --reload
     depends_on:
       - minio
