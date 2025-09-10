@@ -43,7 +43,7 @@
     -- 4. Providers
     CREATE TABLE providers (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        name VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL UNIQUE,
         contact_email VARCHAR(255),
         phone_number VARCHAR(20),
         address TEXT,
