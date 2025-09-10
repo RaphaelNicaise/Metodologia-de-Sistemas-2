@@ -1,0 +1,8 @@
+.main-layout {
+  display: flex;
+}
+
+.post-container {
+  flex: 1;
+  padding: 20px;
+}
