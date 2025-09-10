@@ -12,7 +12,8 @@ const useGetProducts = () => {
                     method: "GET",
                     headers: {
                         'Accept': 'application/json',
-                    }
+                    },
+                    credentials: 'omit'
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(`Error http: ${res.status} ${res.statusText}`);
