@@ -8,7 +8,7 @@
         stock INT NOT NULL DEFAULT 0,
         url_image VARCHAR(255),
         category varchar(100)
-    );
+    ); 
 
     CREATE INDEX idx_products_name ON products(name);
     CREATE INDEX idx_products_barcode ON products(barcode);
