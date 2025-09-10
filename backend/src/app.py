@@ -6,6 +6,7 @@ from src.products.routes.products_routes import products_bp
 from src.providers.routes.providers_routes import providers_bp
 from src.sales.routes.sales_routes import sales_bp
 from src.users.routes.users_routes import users_bp
+from flask_cors import CORS
 
 from minio_storage.minio_service import MinioClient
 from db import Database
@@ -14,6 +15,13 @@ Database() # instancia del cliente de MySQL
 MinioClient() # instancia el singleton de MinIO 
 
 app = Flask(__name__)
+
+CORS(app, 
+     origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization", "Accept"],
+     supports_credentials=True,
+     automatic_options=True)
 
 # register blueprints
 app.register_blueprint(accounting_bp)
