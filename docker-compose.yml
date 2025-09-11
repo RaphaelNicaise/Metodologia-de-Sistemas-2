@@ -86,7 +86,7 @@ services:
       PMA_PORT: 3306
     networks:
       - appnetwork
-  tests:
+  tests-backend:
     build: ./backend
     volumes:
       - ./backend:/app

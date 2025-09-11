@@ -10,7 +10,7 @@ docker compose up --build
 ```
 Ejecutar tests de la API:
 ```bash
-docker-compose run --rm tests pytest -v /app/tests
+docker-compose run --rm tests-backend pytest -v /app/tests
 ```
 
 Lista de servicios:
