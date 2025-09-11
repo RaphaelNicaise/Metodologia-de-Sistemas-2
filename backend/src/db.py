@@ -11,6 +11,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../.env'))
 
 print(f"HOST {os.getenv('MYSQL_HOST')}")
 print(f"DATABASE {os.getenv('MYSQL_DATABASE')}")
+print(f"TEST_DATABASE {os.getenv('MYSQL_TEST_DATABASE')}")
 print(f"PORT {os.getenv('MYSQL_PORT')}")
 # Conexión a la base de datos MySQL Singleton
 class Database:

@@ -23,14 +23,10 @@ def create_app(testing: bool = False): # Funcion Factory
           app.config["DEBUG"] = False
 
      Database()  # instancia del cliente de MySQL
-     MinioClient()  # instancia el singleton de MinIO
+     if not testing:
+          MinioClient() # instancia el singleton de MinIO
 
-     CORS(app,
-           origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-           methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-           allow_headers=["Content-Type", "Authorization", "Accept"],
-           supports_credentials=True,
-           automatic_options=True)
+     CORS(app)
 
      # register blueprints
      app.register_blueprint(accounting_bp)

@@ -70,6 +70,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./db/sql/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql    
       - ./db/sql/02-init_data.sql:/docker-entrypoint-initdb.d/02-init_data.sql
+      - ./db/sql/03-init_test.sql:/docker-entrypoint-initdb.d/03-init_test.sql
     networks:
       - appnetwork
 
@@ -85,6 +86,24 @@ services:
       PMA_PORT: 3306
     networks:
       - appnetwork
+  tests:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONPATH=/app/src
+      - FLASK_ENV=testing
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_TEST_DATABASE=${MYSQL_TEST_DATABASE}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - mysql
+    networks:
+      - appnetwork
+    command: ["tail", "-f", "/dev/null"]  
 
 networks:
   appnetwork:
