@@ -1,24 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import useGetProducts from "../hooks/useGetProducts";
-import ProductCard from "../components/ProductCard";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import ProductsTable from "../components/ProductsTable";
+import SearchInput from "../components/SearchInput"; // Componente extraído
+import '../styles/Products.css'
 
 const Products = () => {
     const { products, loading, error } = useGetProducts();
+    const [searchTerm, setSearchTerm] = useState('');
 
-    if(loading) return <p className="loading">Cargando productos...</p>
-    if(error) return <p className="error">Error: {error}</p>
+    const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-    return(
-        <div className="post-container">
-            {products.length === 0 ? (
-                <p className="no-products">No hay Productos</p>
-            ) : (
-                products.map(product => (
-                    <ProductCard key={product.id}{...product}/>
-                ))
-            )}
-        </div>
-    )
-}
+    return (
+        <>
+            <Header />
+            <div className="main-layout">
+                <Navbar />
+                <div className="post-container">
+                    <h1>Productos</h1>
+
+                    <SearchInput 
+                        onSearch={setSearchTerm}
+                        placeholder="Buscar productos..." 
+                    />
+        
+                    {loading && <p>Cargando productos...</p>}
+                    {error && <p>Error: {error}</p>}
+
+                    {!loading && !error && filteredProducts.length > 0 && (
+                        <ProductsTable products={filteredProducts} />
+                    )}
+
+                    {!loading && !error && filteredProducts.length === 0 && (
+                        <p>No hay productos{searchTerm ? ` que coincidan con "${searchTerm}"` : ''}</p>
+                    )}
+                </div>
+            </div>
+        </>
+    );
+};
 
 export default Products;
