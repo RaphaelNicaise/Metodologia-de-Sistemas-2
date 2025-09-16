@@ -1,7 +1,14 @@
-from flask import Blueprint, jsonify
+# src/sales/routes/sales_routes.py
+# Este archivo define el Blueprint y engancha las rutas a los controllers.
 
-sales_bp = Blueprint("sales", __name__, url_prefix="/ventas")
+from flask import Blueprint
+from ..controllers import sales_controller as saleController
 
-@sales_bp.route("/", methods=["GET"])
-def get_sales():
-    return jsonify({"Modulo de productos": "En construccion"}), 200
+bp = Blueprint("sales", __name__)
+
+# POST /api/sales
+bp.add_url_rule(
+    "/",
+    view_func=saleController.createSale,
+    methods=["POST"]
+)
