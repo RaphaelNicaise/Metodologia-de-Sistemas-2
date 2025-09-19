@@ -1,40 +1,34 @@
-# src/sales/models/sale.py
-# Modelos simples que reflejan tus tablas reales:
-# - sales (encabezado de la venta)
-# - sale_product (detalle de productos de la venta)
-# No agregamos métodos; dejamos la lógica para services/controllers.
+class Sale:
+    def __init__(self, id, sale_date, total_amount, payment_method, ticket_url, invoice_state):
+        self.id = id
+        self.sale_date = sale_date
+        self.total_amount = total_amount
+        self.payment_method = payment_method
+        self.ticket_url = ticket_url
+        self.invoice_state = invoice_state
 
-from ...db import db
+    def __repr__(self):
+        return f"Sale(id={self.id}, sale_date={self.sale_date}, total_amount={self.total_amount}, payment_method={self.payment_method}, ticket_url={self.ticket_url}, invoice_state={self.invoice_state})"
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "sale_date": self.sale_date,
+            "total_amount": float(self.total_amount),
+            "payment_method": self.payment_method,
+            "ticket_url": self.ticket_url,
+            "invoice_state": self.invoice_state
+        }   
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            id=data.get("id"),
+            sale_date=data.get("sale_date"),
+            total_amount=data.get("total_amount"),
+            payment_method=data.get("payment_method"),
+            ticket_url=data.get("ticket_url"),
+            invoice_state=data.get("invoice_state")
+        )
+    
 
-class Sale(db.Model):
-    __tablename__ = "sales"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sale_date = db.Column(db.DateTime, server_default=db.func.now())
-    total_amount = db.Column(db.Numeric(10, 2), nullable=False)
-    payment_method = db.Column(db.String(50))
-    ticket_url = db.Column(db.String(255))
-    invoice_state = db.Column(
-        db.Enum("pendiente", "facturado", name="invoice_state"),
-        server_default="pendiente",
-        nullable=False
-    )
-
-class SaleProduct(db.Model):
-    __tablename__ = "sale_product"
-
-    # PK compuesta: (sale_id, product_id)
-    sale_id = db.Column(
-        db.Integer,
-        db.ForeignKey("sales.id", ondelete="CASCADE"),
-        primary_key=True,
-        nullable=False
-    )
-    product_id = db.Column(
-        db.Integer,
-        db.ForeignKey("products.id", ondelete="CASCADE"),
-        primary_key=True,
-        nullable=False
-    )
-    quantity = db.Column(db.Integer, nullable=False)
-    unit_price = db.Column(db.Numeric(10, 2), nullable=False)
