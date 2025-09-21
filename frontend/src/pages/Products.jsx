@@ -3,30 +3,42 @@ import useGetProducts from "../hooks/useGetProducts";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import ProductsTable from "../components/ProductsTable";
-import SearchInput from "../components/SearchInput"; // Componente extraído
+import SearchInput from "../components/SearchInput";
+import { FaPlus } from "react-icons/fa6";
 import '../styles/Products.css'
 
 const Products = () => {
     const { products, loading, error } = useGetProducts();
     const [searchTerm, setSearchTerm] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
 
-    const filteredProducts = products.filter(product => 
+    const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+
 
     return (
         <>
             <Header />
             <div className="main-layout">
                 <Navbar />
-                <div className="post-container">
+                <div className="product-container">
                     <h1>Productos</h1>
 
-                    <SearchInput 
-                        onSearch={setSearchTerm}
-                        placeholder="Buscar productos..." 
-                    />
-        
+                    <div className="table-component">
+                        <div className="table-search-input">
+                            <SearchInput
+                                onSearch={setSearchTerm}
+                                placeholder="Buscar productos..."
+                            />
+                        </div>
+
+                        <div className="table-add-btn">
+                            <button onClick={() => setIsOpen(true)}><FaPlus /><span>Agregar Producto</span></button>
+                        </div>
+                    </div>
+
                     {loading && <p>Cargando productos...</p>}
                     {error && <p>Error: {error}</p>}
 
@@ -38,6 +50,19 @@ const Products = () => {
                         <p>No hay productos{searchTerm ? ` que coincidan con "${searchTerm}"` : ''}</p>
                     )}
                 </div>
+
+                {isOpen && (
+                    <div className="add-product-container">
+                        <div className="form-add-product">
+                            <h2>Agregar producto</h2>
+                            <div className="form-product-inputs">
+                                
+                            </div>
+                            <button onClick={() => setIsOpen(false)}>Cerrar</button>
+                        </div>
+                    </div>
+
+                )}
             </div>
         </>
     );
