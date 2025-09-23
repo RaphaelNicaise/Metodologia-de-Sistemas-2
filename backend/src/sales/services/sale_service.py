@@ -1,7 +1,7 @@
-from sales.models.sale_model import Sale
-from sales.models.sale_product import SaleProduct
-from products.services.products_service import ProductoService
-from db import Database
+from src.sales.models.sale_model import Sale
+from src.sales.models.sale_product import SaleProduct
+from src.products.services.products_service import ProductoService
+from src.db import Database
 from datetime import datetime
 
 class SaleService:

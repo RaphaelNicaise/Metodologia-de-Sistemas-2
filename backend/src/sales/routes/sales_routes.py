@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from sales.services.sale_service import SaleService
+from src.sales.services.sale_service import SaleService
 from datetime import datetime
 
 sales_bp = Blueprint('sales', __name__, url_prefix='/api/sales')

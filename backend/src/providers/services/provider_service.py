@@ -1,6 +1,6 @@
-from providers.models.provider import Provider
+from src.providers.models.provider import Provider
 import mysql.connector
-from db import Database
+from src.db import Database
 
 class ProviderService:
     def __init__(self):
