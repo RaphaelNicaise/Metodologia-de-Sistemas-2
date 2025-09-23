@@ -42,33 +42,3 @@
   background-color: rgb(2, 168, 2);
 }
 
-.add-product-container {
-  position: fixed; 
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 1px solid red;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(0, 0, 0, 0.5); /* oscurece el fondo */
-  backdrop-filter: blur(5px);     /* desenfoque del resto */
-  z-index: 999; /* se asegura que quede arriba de todo */
-}
-
-.form-add-product {
-  background: #fff;
-  border: 1px solid blue;
-  height: 700px;
-  width: 800px;
-  padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
-
-
-  animation: fadeIn 0.3s ease; /* animación suave */
-}
-
-
