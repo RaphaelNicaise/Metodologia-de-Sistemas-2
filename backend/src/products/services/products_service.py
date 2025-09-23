@@ -48,35 +48,37 @@ class ProductoService:
         
 
     def update_product(self, product_id, data):
+        product = self.get_product_by_id(product_id)
+        if not product:
+            return "NOT_FOUND"
+
+        updated_data = product.to_dict()
+
+        # Evitar que se actualice stock aunque venga en data
+        data = {k: v for k, v in data.items() if k != "stock"}
+        updated_data.update(data)
+
         query = """
         UPDATE products
-        SET name = %s, barcode = %s, price = %s, url_image = %s, category = %s
-        WHERE id = %s
+        SET name=%s, barcode=%s, price=%s, url_image=%s, category=%s
+        WHERE id=%s
         """
         params = (
-            data.get("name"),
-            data.get("barcode"),
-            data.get("price"),
-            data.get("url_image", ""),
-            data.get("category"),
-            product_id
+            updated_data["name"],
+            updated_data["barcode"],
+            updated_data["price"],
+            updated_data["url_image"],
+            updated_data["category"],
+            product_id,
         )
         try:
-            cursor = self.db.execute(query, params)
-
-            # Siempre intentar obtener el producto, aunque rowcount sea 0
-            product = self.get_product_by_id(product_id)
-            if product:
-                return product
-            else:
-                return "NOT_FOUND"
+            self.db.execute(query, params)
+            return self.get_product_by_id(product_id)
         except mysql.connector.IntegrityError as e:
             if e.errno == 1062:
                 return "DUPLICATE"
             return "ERROR"
-        except Exception as e:
-            print(f"{e}")
-            return "ERROR"
+
 
             
     def delete_product(self, product_id):

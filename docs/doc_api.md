@@ -39,12 +39,12 @@ Crea un nuevo producto.
 #### Request Body
 ```json
 {
-  "name": "Coca Cola 500ml",
-  "barcode": "7790895001234",
-  "price": 150.50,
+  "name": "nombre",
+  "barcode": "1234567890123",
+  "price": 59.99,
   "stock": 25,
-  "url_image": "https://server/product1.png",
-  "category": "Bebidas"
+  "url_image": "",
+  "category": "Test"
 }
 ```
 
@@ -52,12 +52,12 @@ Crea un nuevo producto.
 ```json
 {
   "id": 1,
-  "name": "Coca Cola 500ml",
-  "barcode": "7790895001234",
-  "price": 150.50,
+  "name": "nombre",
+  "barcode": "1234567890123",
+  "price": 59.99,
   "stock": 25,
-  "url_image": "https://server/product1.png",
-  "category": "Bebidas"
+  "url_image": "",
+  "category": "Test"
 }
 ```
 
@@ -89,11 +89,11 @@ Actualiza un producto existente.
 #### Request Body
 ```json
 {
-  "name": "Coca Cola 500ml",
-  "barcode": "7790895001234",
-  "price": 150.50,
-  "url_image": "https://server/product1.png",
-  "category": "Bebidas"
+  // pones solo el campo que queres cambiar
+  // no es necesario enviar todos los campos
+  // no poner stock
+  "price": 175.00,
+  "name": "Coca Cola 600ml"
 }
 ```
 
@@ -133,15 +133,15 @@ Obtiene los movimientos de stock de un producto.
 #### Response 🠮 `200 OK`
 ```json
 [
-  {
-    "id": 1,
-    "movement_type": "ingreso",
-    "movement_date": "2025-09-04T14:35:00",
-    "quantity": 10,
-    "user_id": 2,
-    "provider_id": 5,
-    "notes": "Ingreso inicial de stock"
-  }
+    {
+        "id": 2,
+        "movement_date": "Tue, 23 Sep 2025 18:15:51 GMT",
+        "movement_type": "ingreso",
+        "notes": "Compra semanal de proveedor X",
+        "provider_id": 1,
+        "quantity": 3,
+        "user_id": 1
+    }
 ]
 ```
 ⚠️ HTTP Status Codes:
@@ -152,16 +152,16 @@ Agrega stock a un producto y registra el movimiento.
 #### Request Body
 ```json
 {
-  "quantity": 10,
-  "user_id": 2,
-  "provider_id": 5,
-  "notes": "Ingreso inicial de stock"
+  "quantity": 3,
+  "user_id": 1,
+  "provider_id": 1,
+  "notes": "Compra semanal de proveedor X"
 }
 ```
 #### Response 🠮 `200 OK`
 ```json
 {
-  "message": "Se agregaron 10 unidades al stock"
+  "message": "Se agregaron 3 unidades al stock"
 }
 ```
 - Cada registro se guarda en la tabla `stock_movements`.
