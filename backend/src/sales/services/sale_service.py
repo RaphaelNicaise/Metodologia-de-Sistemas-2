@@ -1,6 +1,7 @@
 from src.sales.models.sale_model import Sale
 from src.sales.models.sale_product import SaleProduct
 from src.products.services.products_service import ProductoService
+from src.products.services.stock_service import StockService
 from src.db import Database
 from datetime import datetime
 
@@ -8,6 +9,7 @@ class SaleService:
     def __init__(self):
         self.db = Database()
         self.product_service = ProductoService()
+        self.stock_service = StockService()
 
     # ----------- METODO PRINCIPAL -----------
     
@@ -66,7 +68,17 @@ class SaleService:
                 cursor.execute(product_query, product_params)
                 
                 # 5. Reducir stock
-                self._update_product_stock(cursor, product_data.get("product_id"), -product_data.get("quantity"))
+                stock_result = self.stock_service.reduce_stock(
+                    product_id=product_data.get("product_id"),
+                    quantity=product_data.get("quantity"),
+                    user_id=sale_data.get("user_id"),  
+                    notes=f"Venta #{sale_id}"
+                )
+                
+                if stock_result != "OK":
+                    raise Exception(f"Error al reducir stock del producto {product_data.get('product_id')}: {stock_result}")
+
+                
             
             connection.commit()
             return self.get_sale_by_id(sale_id)
@@ -192,7 +204,16 @@ class SaleService:
             
             # 2. Restaurar stock
             for product_id, quantity in products:
-                self._update_product_stock(cursor, product_id, quantity)
+                stock_result = self.stock_service.add_stock(
+                    product_id=product_id,
+                    quantity=quantity,
+                    user_id=None,  # Podrías pasar el user_id si lo tienes disponible
+                    provider_id=None,
+                    notes=f"Devolución por eliminación de venta #{sale_id}"
+                )
+                
+                if stock_result != "OK":
+                    raise Exception(f"Error al restaurar stock del producto {product_id}: {stock_result}")
             
             # 3. Eliminar venta (se eliminan los productos automaticamente)
             delete_query = "DELETE FROM sales WHERE id = %s"
@@ -210,9 +231,3 @@ class SaleService:
             cursor.close()
             connection.close()
   
-    # ========== METODO AUXILIAR ==========
-    
-    def _update_product_stock(self, cursor, product_id, quantity_change):
-        """Actualizar el stock de un producto"""
-        update_query = "UPDATE products SET stock = stock + %s WHERE id = %s"
-        cursor.execute(update_query, (quantity_change, product_id))
