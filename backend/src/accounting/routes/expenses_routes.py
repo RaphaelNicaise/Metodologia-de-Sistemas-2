@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from accounting.services.expenses_services import ExpenseService
+from src.accounting.services.expenses_services import ExpenseService
 
 expenses_bp = Blueprint("expenses", __name__)
 service = ExpenseService()

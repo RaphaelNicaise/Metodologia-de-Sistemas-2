@@ -1,7 +1,7 @@
 # src/accounting/routes/afip_invoices.py
 
 from flask import Blueprint, jsonify, request
-from accounting.services.afip_invoices_services import AFIPInvoiceService
+from src.accounting.services.afip_invoices_services import AFIPInvoiceService
 from datetime import datetime
 
 afip_invoices_bp = Blueprint("afip_invoices", __name__)

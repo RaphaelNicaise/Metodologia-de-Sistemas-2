@@ -1,7 +1,7 @@
 # src/accounting/services/cash_closures_services.py
 
-from accounting.models.cash_closures import CashClosure
-from db import Database
+from src.accounting.models.cash_closures import CashClosure
+from src.db import Database
 from datetime import datetime
 
 class CashClosureService:

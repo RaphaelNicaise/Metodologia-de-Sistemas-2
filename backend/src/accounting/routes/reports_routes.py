@@ -1,7 +1,7 @@
 # src/accounting/routes/reports.py
 
 from flask import Blueprint, jsonify, request
-from accounting.services.reports_services import ReportsService
+from src.accounting.services.reports_services import ReportsService
 from datetime import datetime, timedelta
 
 reports_bp = Blueprint("reports", __name__)

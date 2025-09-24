@@ -1,6 +1,6 @@
 # src/accounting/services/reports.py
 
-from db import Database
+from src.db import Database
 from datetime import datetime, timedelta
 
 class ReportsService:

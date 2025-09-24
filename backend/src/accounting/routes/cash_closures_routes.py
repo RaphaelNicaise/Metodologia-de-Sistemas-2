@@ -1,7 +1,7 @@
 # src/accounting/routes/cash_closures_routes.py
 
 from flask import Blueprint, jsonify, request
-from accounting.services.cash_closures_services import CashClosureService
+from src.accounting.services.cash_closures_services import CashClosureService
 from datetime import datetime
 
 cash_closures_bp = Blueprint("cash_closures", __name__)

@@ -1,7 +1,7 @@
 # src/accounting/services/afip_invoices.py
 
-from accounting.models.afip_invoices import AFIPInvoice
-from db import Database
+from src.accounting.models.afip_invoices import AFIPInvoice
+from src.db import Database
 from datetime import datetime, timedelta
 
 class AFIPInvoiceService:

@@ -1,5 +1,5 @@
-from accounting.models.expenses import Expense
-from db import Database
+from src.accounting.models.expenses import Expense
+from src.db import Database
 
 class ExpenseService:
     def __init__(self):
