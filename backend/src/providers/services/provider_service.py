@@ -41,4 +41,3 @@ class ProviderService:
         except mysql.connector.IntegrityError as e:
             if e.errno == 1062:
                 return {"error": "DUPLICATE"}
-            return {"error": "DB_ERROR"}

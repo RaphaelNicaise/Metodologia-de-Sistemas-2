@@ -1,6 +1,6 @@
 from flask import Flask
 
-from src.accounting.routes.accounting_routes import accounting_bp
+from src.accounting.routes import accounting_bp
 from src.configuration.routes.config_routes import config_bp
 from src.products.routes.products_routes import products_bp
 from src.providers.routes.providers_routes import providers_bp
@@ -29,7 +29,7 @@ def create_app(testing: bool = False): # Funcion Factory
      CORS(app)
 
      # register blueprints
-     app.register_blueprint(accounting_bp)
+     app.register_blueprint(accounting_bp, url_prefix="/api/contabilidad")
      app.register_blueprint(config_bp)
      app.register_blueprint(products_bp, url_prefix="/api/productos")
      app.register_blueprint(providers_bp, url_prefix="/api/proveedores")

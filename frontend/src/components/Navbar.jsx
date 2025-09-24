@@ -39,7 +39,7 @@ const Navbar = () => {
             <section className="navbar-section">
                 <h3 className="navbar-section-title">STOCK</h3>
                 <div className="navbar-links">
-                    <a href="/productos" className="nav-link">
+                    <a href="#productos" className="nav-link">
                         <FaWineBottle className="nav-icon"/>
                         <span>Productos</span>
                     </a>

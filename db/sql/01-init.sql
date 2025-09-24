@@ -93,6 +93,7 @@ CREATE TABLE expenses (
         amount DECIMAL(10,2) NOT NULL,
         expense_date DATE DEFAULT (CURRENT_DATE),
         user_id INT,
+        notes TEXT,
         FOREIGN KEY (user_id) REFERENCES users(id)
 );
 

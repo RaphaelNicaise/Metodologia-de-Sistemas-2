@@ -11,7 +11,6 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../.env'))
 
 print(f"HOST {os.getenv('MYSQL_HOST')}")
 print(f"DATABASE {os.getenv('MYSQL_DATABASE')}")
-print(f"TEST_DATABASE {os.getenv('MYSQL_TEST_DATABASE')}")
 print(f"PORT {os.getenv('MYSQL_PORT')}")
 # Conexión a la base de datos MySQL Singleton
 class Database:
@@ -23,24 +22,18 @@ class Database:
         return cls._instance
 
     def __init__(self, host=None, user="root", password=None, database=None, retries=5, delay=8):
-        if not hasattr(self, "initialized"):
-                    self.host = host or os.getenv("MYSQL_HOST", "mysql")
-                    self.user = user
-                    self.password = password or os.getenv("MYSQL_ROOT_PASSWORD")
-                    
-                    # Escoge base según entorno
-                    env = os.getenv("FLASK_ENV", "development")
-                    if env == "testing":
-                        self.database = os.getenv("MYSQL_TEST_DATABASE", "db_test")
-                    else:
-                        self.database = os.getenv("MYSQL_DATABASE", "db")
-                    
-                    self.retries = retries
-                    self.delay = delay
-                    self.conn = None
-                    self.cursor = None
-                    self.connect_with_retries()
-                    self.initialized = True
+        # Inicializamos solo una vez
+        if not hasattr(self, "initialized"):  
+            self.host =  os.getenv("MYSQL_HOST","mysql")
+            self.user = user
+            self.password = os.getenv("MYSQL_ROOT_PASSWORD")
+            self.database = os.getenv("MYSQL_DATABASE")
+            self.retries = retries
+            self.delay = delay
+            self.conn = None
+            self.cursor = None
+            self.connect_with_retries()
+            self.initialized = True  # evita reinicialización
 
     def connect_with_retries(self):
         attempts = 0
