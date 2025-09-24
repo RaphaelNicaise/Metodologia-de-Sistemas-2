@@ -69,7 +69,7 @@ const CreateProduct = ({ onClose }) => {
             await createProduct({
                 ...formData,
                 price: parseFloat(formData.price),
-                stock: parseInt(formData.stock),
+                stock: parseInt(formData.stock) || 0,
                 // url_image se cargaría después de subir las imágenes
                 url_image: images.length > 0 ? images[0].name : ''
             });
@@ -130,14 +130,14 @@ const CreateProduct = ({ onClose }) => {
                                 onChange={handleInputChange}
                                 required
                             />
-                            <span>Stock<span style={{ color: "red" }}>*</span></span>
+                            <span>Stock</span>
                             <input
                                 type="number"
                                 name="stock"
                                 placeholder="Ej: 25"
                                 value={formData.stock}
                                 onChange={handleInputChange}
-                                required
+                                
                             />
                             <span>Categoria<span style={{ color: "red" }}>*</span></span>
                             <select

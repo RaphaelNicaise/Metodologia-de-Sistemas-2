@@ -1,0 +1,237 @@
+/* Estilos para el contenedor de la tabla */
+.table-container {
+    border-radius: 1px;
+    overflow: hidden;
+    box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e0e0e0;
+}
+
+.products-table {
+    min-width: 650px;
+}
+
+/* Estilos para los indicadores de ordenamiento */
+.sort-indicator {
+    margin-left: 0.5rem;
+    color: inherit;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.sort-arrow {
+    font-size: 16px;
+}
+
+.sort-arrow.asc {
+    color: #1976d2;
+}
+
+.sort-arrow.desc {
+    color: #1976d2;
+}
+
+.sort-indicator-inactive {
+    display: flex;
+    flex-direction: column;
+    opacity: 0.4;
+    line-height: 0.8;
+}
+
+.sort-arrow-small {
+    font-size: 12px;
+}
+
+.sort-arrow-small.down {
+    margin-top: -3px;
+}
+
+.sortable-header-content {
+    display: flex;
+    align-items: center;
+}
+
+/* Estilos para imágenes de productos */
+.product-image {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+/* Estilos para botones de acción */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-edit,
+.btn-erase {
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn-edit {
+    color: #1976d2;
+    margin-right: 10px;
+}
+
+.btn-edit:hover:not(.btn-disabled) {
+    background-color: rgba(25, 118, 210, 0.1);
+}
+
+.btn-erase {
+    color: #d32f2f;
+}
+
+.btn-erase:hover:not(.btn-disabled) {
+    background-color: rgba(211, 47, 47, 0.1);
+}
+
+.btn-disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5;
+}
+
+/* Estilos para el diálogo de confirmación */
+.delete-dialog {
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.delete-dialog .MuiDialog-paper {
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid #e0e0e0;
+    animation: fadeIn 0.3s ease;
+}
+
+.dialog-title {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #d32f2f;
+    padding: 20px 24px;
+}
+
+.dialog-content {
+    padding: 20px 24px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.dialog-actions {
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+    gap: 10px;
+}
+
+.dialog-cancel-btn,
+.dialog-confirm-btn {
+    height: 40px;
+    border-radius: 4px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: none;
+    transition: background-color 0.4s ease;
+    min-width: 120px;
+}
+
+.dialog-confirm-btn {
+    background-color: rgb(174, 0, 0) !important;
+    color: white !important;
+}
+
+.dialog-confirm-btn:hover {
+    background-color: rgb(255, 18, 18)!important;
+}
+
+.dialog-cancel-btn {
+    border: 1px solid #757575;
+    color: #757575;
+}
+
+.dialog-cancel-btn:hover {
+    background-color: #f5f5f5;
+    border-color: #333;
+}
+
+.dialog-cancel-btn:disabled,
+.dialog-confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Estilos para el Snackbar/Alert */
+.custom-snackbar {
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.snackbar-alert {
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.snackbar-alert.MuiAlert-filledSuccess {
+    background-color: #2e7d32;
+}
+
+.snackbar-alert.MuiAlert-filledError {
+    background-color: #d32f2f;
+}
+
+.snackbar-alert .MuiAlert-icon {
+    font-size: 20px;
+}
+
+.snackbar-alert .MuiAlert-message {
+    padding: 8px 0;
+}
+
+/* Estilos para el CircularProgress */
+.loading-spinner {
+    color: #d32f2f;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.MuiDialog-root .MuiDialog-paper {
+    font-family: "Roboto Condensed", sans-serif !important;
+}
+
+.MuiSnackbar-root .MuiAlert-root {
+    font-family: "Roboto Condensed", sans-serif !important;
+    animation: slideIn 0.3s ease;
+}
