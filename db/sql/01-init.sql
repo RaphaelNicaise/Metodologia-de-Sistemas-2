@@ -123,7 +123,7 @@ CREATE TABLE afip_invoices (
 CREATE TABLE stock_movements (
         id INT AUTO_INCREMENT PRIMARY KEY,
         product_id INT NOT NULL,
-        movement_type ENUM('ingreso','devolucion') NOT NULL,
+        movement_type ENUM('ingreso','salida','devolucion') NOT NULL,
         quantity INT NOT NULL,
         movement_date DATETIME DEFAULT CURRENT_TIMESTAMP,
         user_id INT,            -- who registered the movement
