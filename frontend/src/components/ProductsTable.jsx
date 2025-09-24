@@ -8,12 +8,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import { MdCancel } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 
 // Componente para los indicadores de ordenamiento
 const SortIndicator = ({ isActive, direction }) => {
   return (
-    <Box component="span" sx={{ 
-      ml: 0.5, 
+    <Box component="span" sx={{
+      ml: 0.5,
       color: isActive ? 'primary.main' : 'text.disabled',
       display: 'inline-flex',
       flexDirection: 'column',
@@ -21,12 +23,12 @@ const SortIndicator = ({ isActive, direction }) => {
       fontSize: '0.8rem'
     }}>
       {isActive ? (
-        direction === 'asc' ? 
-          <span style={{ fontSize: '16px' }}>▲</span> : 
+        direction === 'asc' ?
+          <span style={{ fontSize: '16px' }}>▲</span> :
           <span style={{ fontSize: '16px' }}>▼</span>
       ) : (
-        <Box sx={{ 
-          display: 'flex', 
+        <Box sx={{
+          display: 'flex',
           flexDirection: 'column',
           opacity: 0.4,
           lineHeight: 0.8
@@ -72,7 +74,7 @@ const BodyTableCell = styled(TableCell)(({ theme, hasrightborder = "false" }) =>
   position: 'relative',
 }));
 
-const ProductsTable = ({ products = [] }) => {
+const ProductsTable = ({ products = [], onEdit, onDelete }) => {
   const [orderBy, setOrderBy] = useState('name');
   const [order, setOrder] = useState('asc');
 
@@ -113,7 +115,7 @@ const ProductsTable = ({ products = [] }) => {
   const SortableHeader = ({ label, property, hasRightBorder = false }) => {
     const isActive = orderBy === property;
     return (
-      <StyledTableCell 
+      <StyledTableCell
         onClick={() => handleSort(property)}
         hasrightborder={hasRightBorder ? "true" : "false"}
       >
@@ -126,10 +128,10 @@ const ProductsTable = ({ products = [] }) => {
   };
 
   return (
-    <TableContainer 
-      component={Paper} 
-      sx={{ 
-        borderRadius: 1, 
+    <TableContainer
+      component={Paper}
+      sx={{
+        borderRadius: 1,
         overflow: 'hidden',
         boxShadow: 2,
         border: '1px solid #e0e0e0'
@@ -144,6 +146,7 @@ const ProductsTable = ({ products = [] }) => {
             <SortableHeader label="Precio" property="price" hasRightBorder />
             <SortableHeader label="Stock" property="stock" hasRightBorder />
             <StyledTableCell>Código de Barra</StyledTableCell>
+            <StyledTableCell align="center">Acciones</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -165,6 +168,26 @@ const ProductsTable = ({ products = [] }) => {
                 <BodyTableCell hasrightborder="true">${price}</BodyTableCell>
                 <BodyTableCell hasrightborder="true">{stock}</BodyTableCell>
                 <BodyTableCell>{barcode}</BodyTableCell>
+                <BodyTableCell>
+                  <div className="btn">
+                    <div
+                      className="btn-edit"
+                      onClick={() => onEdit && onEdit(id)}
+                      style={{ cursor: 'pointer', display: 'inline-block', marginRight: '10px' }}
+                      title="Editar producto"
+                    >
+                      <FaEdit />
+                    </div>
+                    <div
+                      className="btn-erase"
+                      onClick={() => onDelete && onDelete(id)}
+                      style={{ cursor: 'pointer', display: 'inline-block' }}
+                      title="Eliminar producto"
+                    >
+                      <MdCancel />
+                    </div>
+                  </div>
+                </BodyTableCell>
               </StyledTableRow>
             );
           })}

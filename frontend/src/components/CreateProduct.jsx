@@ -83,9 +83,8 @@ const CreateProduct = ({ onClose }) => {
             });
             setImages([]);
             setImagesPreviews([]);
-
-
             onClose();
+            window.location.reload();
         } catch (error) {
             console.error('Error al crear producto:', error);
         }
