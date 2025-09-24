@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 
-from providers.services.provider_service import ProviderService
+from src.providers.services.provider_service import ProviderService
 
 providers_bp = Blueprint("providers", __name__, url_prefix="/proveedores")
 p_service = ProviderService()

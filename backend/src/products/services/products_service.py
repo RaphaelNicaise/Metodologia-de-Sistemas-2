@@ -1,6 +1,6 @@
-from products.models.product import Product
+from src.products.models.product import Product
 import mysql.connector
-from db import Database
+from src.db import Database
 
 
 

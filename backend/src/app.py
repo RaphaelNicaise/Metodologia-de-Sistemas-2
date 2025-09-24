@@ -8,8 +8,8 @@ from src.sales.routes.sales_routes import sales_bp
 from src.users.routes.users_routes import users_bp
 from flask_cors import CORS
 
-from minio_storage.minio_service import MinioClient
-from db import Database
+from src.minio_storage.minio_service import MinioClient
+from src.db import Database
 
 def create_app(testing: bool = False): # Funcion Factory
 
