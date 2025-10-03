@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.main-layout {
+  display: flex;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.product-container {
+  flex: 1;
+  padding: 20px;
+}
+
+.product-container h1{
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 35px;
+}
+
+.table-component{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.table-add-btn button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  width: 200px;
+  color: white;
+  background-color: green;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  transition: background-color 0.4s ease;
+}
+
+.table-add-btn button:hover{
+  background-color: rgb(2, 168, 2);
+}
+

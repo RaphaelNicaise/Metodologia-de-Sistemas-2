@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+.add-product-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.5);
+    /* oscurece el fondo */
+    backdrop-filter: blur(5px);
+    /* desenfoque del resto */
+    z-index: 999;
+    /* se asegura que quede arriba de todo */
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.add-product-container h2 {
+    font-size: 30px;
+}
+
+.form-add-product {
+    background: #fff;
+    height: 800px;
+    width: 800px;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    flex-direction: column;
+    display: flex;
+    animation: fadeIn 0.3s ease;
+    /* animación suave */
+}
+
+.form-product-container {
+    flex:1;
+    margin-top: 30px;
+    height: 500px;
+}
+
+.form-product-inputs {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+}
+
+.form-product-inputs input {
+    height: 35px;
+}
+
+.form-product-inputs select{
+    height: 35px;
+}
+
+.form-product-container input[type="file"]::file-selector-button{
+    height: 35px;
+}
+
+.form-product-inputs input::placeholder {
+    padding-left: 5px;
+}
+
+.form-product-inputs span {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+
+.image-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-preview {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    right: 0;
+    margin-top: 20px;
+    justify-content: flex-end;
+    border-top: 1px solid #ddd;
+}
+
+.form-buttons button {
+    height: 40px;
+    width: 200px;
+    border-radius: 4px;
+    border: none;
+    margin-top: 50px;    
+    font-size: 17px;
+}
+
+
+#btn-cancel {
+    background-color: rgb(174, 0, 0);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+
+}
+
+#btn-cancel:hover {
+    background-color: rgb(255, 18, 18);
+}
+
+#btn-add {
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+#btn-add:hover {
+    background-color: rgb(2, 168, 2);
+}
