@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const useCreateProduct = () => {
     const [data, setData] = useState(null);
