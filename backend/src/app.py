@@ -11,7 +11,7 @@ from flask_cors import CORS
 from src.minio_storage.minio_service import MinioClient
 from src.db import Database
 
-def create_app(testing: bool = False): # Funcion Factory
+def create_app(testing: bool = False): # Funcion que usa patron factory
 
      app = Flask(__name__)
 
@@ -22,6 +22,7 @@ def create_app(testing: bool = False): # Funcion Factory
           app.config["TESTING"] = False
           app.config["DEBUG"] = False
 
+     # inicializar servicios singleton con el patron builder
      Database()  # instancia del cliente de MySQL
      if not testing:
           MinioClient() # instancia el singleton de MinIO

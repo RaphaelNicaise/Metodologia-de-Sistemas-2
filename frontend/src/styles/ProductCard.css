@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+.product-card{
+    background-color: #f8f9fa;
+    display: flex;
+    font-family: "Roboto Condensed", sans-serif;
+    align-items: center;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+
+.product-image-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    margin-right: 30px;
+}
+
+.product-image-container img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-card-info{
+    display: flex;
+}
+
+.product-card-info strong{
+    margin-right: 5px;
+}
+
+.product-title{
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+}
+
+.product-category{
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+}
+
+.product-card-meta{
+    display: flex;
+    align-items: center;
+}
+
+.product-price{
+    margin-right: 50px;
+}
+
+.product-stock{
+    margin-right: 50px;
+}
