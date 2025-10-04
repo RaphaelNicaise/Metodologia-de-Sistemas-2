@@ -56,11 +56,13 @@ class Database:
 
 
     def execute(self, query, params=None):
-        self.cursor.execute(query, params or ())
-        # Solo hacer commit si no es un SELECT
+        cursor = self.conn.cursor(dictionary=True)  # cursor nuevo como diccionario
+        cursor.execute(query, params or ())
+        
         if not query.strip().lower().startswith("select"):
             self.conn.commit()
-        return self.cursor
+        
+        return cursor
 
     def close(self):
         if self.cursor:

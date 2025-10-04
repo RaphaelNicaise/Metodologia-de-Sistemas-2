@@ -1,18 +1,20 @@
 from flask import Blueprint, jsonify, request
 
-from products.services.products_service import ProductoService
+from src.products.services.products_service import ProductoService
+from src.products.services.stock_service import StockService
 
 products_bp = Blueprint("products", __name__)
-service = ProductoService()
+p_service = ProductoService()
+s_service = StockService()
 
 @products_bp.route("/", methods=["GET"])
 def get_products():
-    products = service.get_all_products()
+    products = p_service.get_all_products()
     return jsonify([product.to_dict() for product in products]), 200
 
 @products_bp.route("/<int:product_id>", methods=["GET"])
 def get_product(product_id):
-    product = service.get_product_by_id(product_id)
+    product = p_service.get_product_by_id(product_id)
     if product:
         return jsonify(product.to_dict()), 200
     return jsonify({"error": "Product not found"}), 404
@@ -20,9 +22,69 @@ def get_product(product_id):
 @products_bp.route("/", methods=["POST"])
 def create_product():
     data = request.get_json()
-    product = service.create_product(data)
-    if product:
-        return jsonify(product.to_dict()), 201
-    return jsonify({"error": "Failed to create product"}), 400
+    result = p_service.create_product(data)
 
-# Rutas para actualizar y eliminar
+    if isinstance(result, dict) and result.get("error") == "DUPLICATE":
+        return jsonify({"error": "El producto ya existe"}), 409
+
+    if not result or (isinstance(result, dict) and "error" in result):
+        return jsonify({"error": "Error al crear producto"}), 400
+    
+    return jsonify(result.to_dict()), 201 # devuelve el producto creado con su ID
+
+
+@products_bp.route("/<int:product_id>", methods=["PUT"])
+def update_product(product_id):
+    data = request.get_json()
+    result = p_service.update_product(product_id, data)
+
+    if result == "NOT_FOUND":
+        return jsonify({"error": "Producto no encontrado"}), 404
+    elif result == "DUPLICATE":
+        return jsonify({"error": "El nombre del producto ya existe"}), 409
+    elif result == "ERROR":
+        return jsonify({"error": "Error al actualizar producto"}), 500
+
+    # Actualización exitosa
+    return jsonify(result.to_dict()), 200
+
+@products_bp.route("/<int:product_id>", methods=["DELETE"])
+def delete_product(product_id):
+    result = p_service.delete_product(product_id)
+
+    if result == "DELETED":
+        return jsonify({"message": "Producto eliminado"}), 200
+    elif result == "NOT_FOUND":
+        return jsonify({"error": "Producto no encontrado"}), 404
+    else:  # result == "ERROR"
+        return jsonify({"error": "Error al eliminar producto"}), 500
+    
+# stock
+
+@products_bp.route("/<int:product_id>/stock", methods=["POST"])
+def add_stock(product_id):
+    data = request.get_json()
+    quantity = data.get("quantity")
+    user_id = data.get("user_id")
+    provider_id = data.get("provider_id")
+    notes = data.get("notes")
+
+    result = s_service.add_stock(product_id, quantity, user_id, provider_id, notes)
+
+    if result == "INVALID_QUANTITY":
+        return jsonify({"error": "Cantidad inválida"}), 400
+    elif result == "NOT_FOUND":
+        return jsonify({"error": "Producto no encontrado"}), 404
+    elif result == "ERROR":
+        return jsonify({"error": "Error al agregar stock"}), 500
+
+    return jsonify({"message": f"Se agregaron {quantity} unidades al stock"}), 200
+
+@products_bp.route("/<int:product_id>/stock", methods=["GET"])
+def get_stock_movements(product_id):
+    result = s_service.get_movements(product_id)
+
+    if result == "NOT_FOUND":
+        return jsonify({"error": "Producto no encontrado"}), 404
+
+    return jsonify(result), 200
