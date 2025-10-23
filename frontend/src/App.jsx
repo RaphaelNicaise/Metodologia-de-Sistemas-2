@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+/*import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import './App.css'
 import Home from './pages/Home'
 import Login from './pages/Login';
@@ -16,4 +16,9 @@ function App() {
   )
 }
 
-export default App
+export default App*/
+
+import { AppRouter} from './routes/AppRoutes';
+
+const App = () => <AppRouter/>;
+export default App;

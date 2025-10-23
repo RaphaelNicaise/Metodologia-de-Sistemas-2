@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/SearchInput.css';
+import './SearchInput.css';
 const SearchInput = ({ onSearch, placeholder = "search your chats" }) => {
   const handleReset = (e) => {
     e.preventDefault();

@@ -1,87 +1,28 @@
 import React, { useState, useMemo } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import { MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import useDeleteProduct from "../hooks/useDeleteProduct";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Snackbar,
-  Alert,
-  CircularProgress
-} from '@mui/material';
-import '../styles/ProductTable.css';
-
-// Componente para los indicadores de ordenamiento
-const SortIndicator = ({ isActive, direction }) => {
-  return (
-    <Box component="span" className="sort-indicator">
-      {isActive ? (
-        direction === 'asc' ?
-          <span className="sort-arrow asc">▲</span> :
-          <span className="sort-arrow desc">▼</span>
-      ) : (
-        <Box className="sort-indicator-inactive">
-          <span className="sort-arrow-small up">▲</span>
-          <span className="sort-arrow-small down">▼</span>
-        </Box>
-      )}
-    </Box>
-  );
-};
-
-// Estilos personalizados para las celdas de encabezado
-const StyledTableCell = styled(TableCell)(({ theme, hasrightborder = "false" }) => ({
-  fontWeight: 'bold',
-  cursor: 'pointer',
-  padding: '16px 12px',
-  borderBottom: '2px solid',
-  borderBottomColor: theme.palette.divider,
-  borderRight: hasrightborder === "true" ? '1px solid #e0e0e0' : 'none',
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  transition: 'background-color 0.2s ease',
-  position: 'relative',
-}));
-
-// Estilos para las filas de la tabla
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(even)': {
-    backgroundColor: theme.palette.grey[50],
-  },
-  '&:hover': {
-    backgroundColor: theme.palette.action.selected,
-  },
-  transition: 'background-color 0.2s ease',
-}));
-
-// Estilo para celdas del cuerpo con bordes verticales
-const BodyTableCell = styled(TableCell)(({ theme, hasrightborder = "false" }) => ({
-  padding: '12px',
-  borderRight: hasrightborder === "true" ? '1px solid #e0e0e0' : 'none',
-  position: 'relative',
-}));
+import useDeleteProduct from "../../../../hooks/useDeleteProduct";
+import DeleteProductDialog from "./DeleteProductDialog";
+import SortableHeader from "./SortableHeader";
+import { StyledTableCell, StyledTableRow, BodyTableCell } from './ProductsTable.styles';
+import '../../../../styles/Products.css';
+import Snackbar from '@mui/material/Snackbar'; // <-- AGREGA ESTA LÍNEA
+import Alert from '@mui/material/Alert';
 
 const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
   const [orderBy, setOrderBy] = useState('name');
   const [order, setOrder] = useState('asc');
   const [deleteConfirm, setDeleteConfirm] = useState(null);
-  const [snackbar, setSnackbar] = useState({ 
-    open: false, 
-    message: '', 
-    severity: 'success' 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
   });
 
   const { deleteProduct, loading, error } = useDeleteProduct();
@@ -101,19 +42,19 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
 
     try {
       await deleteProduct(deleteConfirm.id);
-      
+
       setSnackbar({
         open: true,
         message: `Producto "${deleteConfirm.name}" eliminado correctamente`,
         severity: 'success'
       });
-      
+
       if (onProductDeleted) {
         onProductDeleted(deleteConfirm.id);
       }
 
       window.location.reload();
-      
+
     } catch (error) {
       setSnackbar({
         open: true,
@@ -158,21 +99,6 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
     });
   }, [products, orderBy, order]);
 
-  const SortableHeader = ({ label, property, hasRightBorder = false }) => {
-    const isActive = orderBy === property;
-    return (
-      <StyledTableCell
-        onClick={() => handleSort(property)}
-        hasrightborder={hasRightBorder ? "true" : "false"}
-      >
-        <Box className="sortable-header-content">
-          {label}
-          <SortIndicator isActive={isActive} direction={order} />
-        </Box>
-      </StyledTableCell>
-    );
-  };
-
   return (
     <>
       <TableContainer
@@ -182,11 +108,38 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
         <Table className="products-table">
           <TableHead>
             <TableRow>
-              <StyledTableCell hasrightborder="true">Imagen</StyledTableCell>
-              <SortableHeader label="Nombre" property="name" hasRightBorder />
-              <SortableHeader label="Categoría" property="category" hasRightBorder />
-              <SortableHeader label="Precio" property="price" hasRightBorder />
-              <SortableHeader label="Stock" property="stock" hasRightBorder />
+              <SortableHeader
+                label="Nombre"
+                property="name"
+                hasRightBorder
+                isActive={orderBy === 'name'}
+                direction={order}
+                onSort={handleSort}
+              />
+              <SortableHeader
+                label="Categoría"
+                property="category"
+                hasRightBorder
+                isActive={orderBy === 'category'}
+                direction={order}
+                onSort={handleSort}
+              />
+              <SortableHeader
+                label="Precio"
+                property="price"
+                hasRightBorder
+                isActive={orderBy === 'price'}
+                direction={order}
+                onSort={handleSort}
+              />
+              <SortableHeader
+                label="Stock"
+                property="stock"
+                hasRightBorder
+                isActive={orderBy === 'stock'}
+                direction={order}
+                onSort={handleSort}
+              />
               <StyledTableCell>Código de Barra</StyledTableCell>
               <StyledTableCell align="center">Acciones</StyledTableCell>
             </TableRow>
@@ -235,35 +188,13 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
         </Table>
       </TableContainer>
 
-      <Dialog
+      <DeleteProductDialog
         open={!!deleteConfirm}
+        loading={loading}
+        productName={deleteConfirm?.name}
         onClose={cancelDelete}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        className="delete-dialog"
-      >
-        <DialogTitle id="alert-dialog-title" className="dialog-title">
-          Confirmar eliminación
-        </DialogTitle>
-        <DialogContent className="dialog-content">
-          ¿Estás seguro de que deseas eliminar el producto "{deleteConfirm?.name}"? 
-          Esta acción no se puede deshacer.
-        </DialogContent>
-        <DialogActions className="dialog-actions">
-          <Button onClick={cancelDelete} disabled={loading} className="dialog-cancel-btn">
-            Cancelar
-          </Button>
-          <Button 
-            onClick={confirmDelete} 
-            color="error" 
-            disabled={loading}
-            className="dialog-confirm-btn"
-            startIcon={loading ? <CircularProgress size={16} className="loading-spinner" /> : null}
-          >
-            {loading ? 'Eliminando...' : 'Eliminar'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={confirmDelete}
+      />
 
       <Snackbar
         open={snackbar.open}
@@ -272,9 +203,9 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         className="custom-snackbar"
       >
-        <Alert 
-          onClose={closeSnackbar} 
-          severity={snackbar.severity} 
+        <Alert
+          onClose={closeSnackbar}
+          severity={snackbar.severity}
           className="snackbar-alert"
         >
           {snackbar.message}

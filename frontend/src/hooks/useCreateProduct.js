@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { createProductApi } from "../api/productService";
 
 const useCreateProduct = () => {
     const [data, setData] = useState(null);
@@ -8,18 +9,9 @@ const useCreateProduct = () => {
     const createProduct = async (productData) => {
         setLoading(true);
         setError(null);
-        try {
-            const res = await fetch("http://localhost:5000/api/productos/", {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(productData)
-            })
-            const data = await res.json();
 
-            if (!res.ok) throw new Error(`Error http: ${res.status} ${res.statusText}`);
+        try {
+            const data = await createProductApi(productData);
             setData(data);
             return data;
 
@@ -31,6 +23,8 @@ const useCreateProduct = () => {
             setLoading(false);
         }
     }
+
     return { createProduct, loading, error, data };
 }
+
 export default useCreateProduct;

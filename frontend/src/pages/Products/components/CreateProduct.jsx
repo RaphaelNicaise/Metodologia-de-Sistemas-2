@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import useCreateProduct from "../hooks/useCreateProduct";
-import '../styles/CreateProduct.css';
+import useCreateProduct from "../../../hooks/useCreateProduct";
+import '../../../styles/CreateProduct.css';
 
 const CreateProduct = ({ onClose }) => {
     const { createProduct, loading: creating, error: createError } = useCreateProduct();

@@ -1,36 +1,28 @@
-import React, { useState } from "react"
+import { useState } from "react"
+import { deleteProductApi } from "../api/productService";
 
 const useDeleteProduct = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const deleteProduct = async (productId) => {
-        if(!productId){
-            const errorMsg = "Se require el ID del producto";
-            setError(errorMsg);
-            throw new Error(errorMsg);
-        }
         setLoading(true);
         setError(null);
+        
         try {
-            const res = await fetch(`http://localhost:5000/api/productos/${productId}`, {
-                method: "DELETE",
-                headers:{
-                    'Accept': 'application/json',
-                    'Content-type': 'application/json',
-                }
-            })
-            if(!res.ok) throw new Error(`Error http: ${res.status} ${res.statusText}`);
-            return {success:true}
+            const result = await deleteProductApi(productId);
+            return result;
+
         } catch (error) {
             console.error("Error deleting product", error);
             setError(error.message);
             throw error;
-        }finally{
+        } finally {
             setLoading(false);
         }
     }
-    return {deleteProduct, loading, error};
+    
+    return { deleteProduct, loading, error };
 }
 
 export default useDeleteProduct;

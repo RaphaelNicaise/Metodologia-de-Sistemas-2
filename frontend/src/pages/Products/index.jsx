@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import useGetProducts from "../hooks/useGetProducts";
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import ProductsTable from "../components/ProductsTable";
-import SearchInput from "../components/SearchInput";
+import useGetProducts from "../../hooks/useGetProducts";
+import Header from "../../layouts/Header/Header";
+import Navbar from "../../components/Navbar";
+import ProductsTable from "./components/ProductTable/ProductsTable";
+import SearchInput from "../../components/common/SearchInput";
 import { FaPlus } from "react-icons/fa6";
-import CreateProduct from "../components/CreateProduct"; 
-import '../styles/Products.css'
+import CreateProduct from "./components/CreateProduct"; 
+import '../../styles/Products.css';
 
 const Products = () => {
   const { products, loading, error } = useGetProducts();
