@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"; 
+import { useState, useMemo } from "react"; 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -46,7 +46,7 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
     severity: 'success'
   });
 
-  const { deleteProduct, loading, error } = useDeleteProduct();
+  const { deleteProduct, loading } = useDeleteProduct();
 
 
   const handleSort = (property: ProductSortKey) => {

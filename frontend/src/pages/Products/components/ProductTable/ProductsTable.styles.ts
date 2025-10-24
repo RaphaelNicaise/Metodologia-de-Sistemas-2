@@ -30,7 +30,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   transition: 'background-color 0.2s ease',
 }));
 
-export const BodyTableCell = styled(TableCell)<StyledCellProps>(({ theme, hasrightborder = "false" }) => ({
+export const BodyTableCell = styled(TableCell)<StyledCellProps>(({  hasrightborder = "false" }) => ({
   padding: '12px',
   borderRight: hasrightborder === "true" ? '1px solid #e0e0e0' : 'none',
   position: 'relative',
