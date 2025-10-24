@@ -1,5 +1,4 @@
-import React from "react";
-import '../styles/Navbar.css'
+import '../styles/Navbar.css';
 import { LuChartLine } from "react-icons/lu";
 import { FaBell } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";

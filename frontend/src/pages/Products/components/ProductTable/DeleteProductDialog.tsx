@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Dialog,
     DialogTitle,
@@ -8,7 +7,15 @@ import {
     CircularProgress
 } from '@mui/material';
 
-const DeleteProductDialog = ({ open, loading, productName, onClose, onConfirm }) => {
+interface Props {
+  open: boolean;
+  loading: boolean;
+  productName: string | undefined; 
+  onClose: () => void;
+  onConfirm: () => void;
+}
+
+const DeleteProductDialog = ({ open, loading, productName, onClose, onConfirm }: Props) => {
     return (
         <Dialog
             open={open}

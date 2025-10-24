@@ -3,9 +3,9 @@ import { deleteProductApi } from "../api/productService";
 
 const useDeleteProduct = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
-    const deleteProduct = async (productId) => {
+    const deleteProduct = async (productId: number) => {
         setLoading(true);
         setError(null);
         
@@ -13,10 +13,14 @@ const useDeleteProduct = () => {
             const result = await deleteProductApi(productId);
             return result;
 
-        } catch (error) {
-            console.error("Error deleting product", error);
-            setError(error.message);
-            throw error;
+        } catch (err) { 
+            console.error("Error deleting product", err);
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Ocurrió un error desconocido al eliminar");
+            }
+            throw err;
         } finally {
             setLoading(false);
         }

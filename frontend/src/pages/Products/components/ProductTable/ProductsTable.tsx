@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react"; 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -12,14 +12,35 @@ import DeleteProductDialog from "./DeleteProductDialog";
 import SortableHeader from "./SortableHeader";
 import { StyledTableCell, StyledTableRow, BodyTableCell } from './ProductsTable.styles';
 import '../../../../styles/Products.css';
-import Snackbar from '@mui/material/Snackbar'; // <-- AGREGA ESTA LÍNEA
-import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert'; 
+import type { AlertColor } from '@mui/material/Alert';
+import type{ Product } from "../../../../types/Product"; 
 
-const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
-  const [orderBy, setOrderBy] = useState('name');
-  const [order, setOrder] = useState('asc');
-  const [deleteConfirm, setDeleteConfirm] = useState(null);
-  const [snackbar, setSnackbar] = useState({
+interface Props {
+  products: Product[];
+  onEdit: (id: number) => void; 
+  onProductDeleted: (id: number) => void; 
+}
+
+type Order = 'asc' | 'desc';
+type DeleteConfirmState = { id: number; name: string } | null;
+
+interface SnackbarState {
+  open: boolean;
+  message: string;
+  severity: AlertColor; 
+}
+
+
+type ProductSortKey = 'name' | 'category' | 'price' | 'stock';
+
+const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
+
+  const [orderBy, setOrderBy] = useState<ProductSortKey>('name');
+  const [order, setOrder] = useState<Order>('asc');
+  const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState>(null);
+  const [snackbar, setSnackbar] = useState<SnackbarState>({
     open: false,
     message: '',
     severity: 'success'
@@ -27,13 +48,14 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
 
   const { deleteProduct, loading, error } = useDeleteProduct();
 
-  const handleSort = (property) => {
+
+  const handleSort = (property: ProductSortKey) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleDeleteClick = (productId, productName) => {
+  const handleDeleteClick = (productId: number, productName: string) => {
     setDeleteConfirm({ id: productId, name: productName });
   };
 
@@ -55,10 +77,14 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
 
       window.location.reload();
 
-    } catch (error) {
+    } catch (err) {
+      let message = "Error al eliminar el producto";
+      if (err instanceof Error) {
+        message = `Error al eliminar el producto: ${err.message}`;
+      }
       setSnackbar({
         open: true,
-        message: `Error al eliminar el producto: ${error.message}`,
+        message: message,
         severity: 'error'
       });
     } finally {
@@ -75,27 +101,26 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
   };
 
   const sortedProducts = useMemo(() => {
-    return [...products].sort((a, b) => {
-      let aValue = a[orderBy];
-      let bValue = b[orderBy];
+    return [...products].sort((a: Product, b: Product) => {
 
-      if (typeof aValue === 'string') {
-        aValue = aValue.toLowerCase();
-        bValue = bValue.toLowerCase();
+      const aValue = a[orderBy]; 
+      const bValue = b[orderBy];
+
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        const aLower = aValue.toLowerCase();
+        const bLower = bValue.toLowerCase();
+        if (aLower < bLower) return order === 'asc' ? -1 : 1;
+        if (aLower > bLower) return order === 'asc' ? 1 : -1;
+        return 0;
       }
 
-      if (orderBy === 'price' || orderBy === 'stock') {
-        aValue = Number(aValue);
-        bValue = Number(bValue);
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        if (aValue < bValue) return order === 'asc' ? -1 : 1;
+        if (aValue > bValue) return order === 'asc' ? 1 : -1;
+        return 0;
       }
-
-      if (aValue < bValue) {
-        return order === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return order === 'asc' ? 1 : -1;
-      }
-      return 0;
+      
+      return 0; 
     });
   }, [products, orderBy, order]);
 
@@ -146,9 +171,9 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }) => {
           </TableHead>
           <TableBody>
             {sortedProducts.map(({ id, name, barcode, price, stock, url_image, category }) => {
-              const imageToShow = url_image && url_image.length > 0
-                ? url_image[0]
-                : '/Image-not-found.png';
+              
+              const imageToShow = url_image || '/Image-not-found.png';
+              
               return (
                 <StyledTableRow key={id}>
                   <BodyTableCell hasrightborder="true">

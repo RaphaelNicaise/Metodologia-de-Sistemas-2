@@ -2,8 +2,11 @@ import { styled } from '@mui/material/styles';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 
-// Estilos para las celdas de encabezado
-export const StyledTableCell = styled(TableCell)(({ theme, hasrightborder = "false" }) => ({
+interface StyledCellProps {
+  hasrightborder?: string;
+}
+
+export const StyledTableCell = styled(TableCell)<StyledCellProps>(({ theme, hasrightborder = "false" }) => ({
   fontWeight: 'bold',
   cursor: 'pointer',
   padding: '16px 12px',
@@ -17,7 +20,6 @@ export const StyledTableCell = styled(TableCell)(({ theme, hasrightborder = "fal
   position: 'relative',
 }));
 
-// Estilos para las filas de la tabla
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
     backgroundColor: theme.palette.grey[50],
@@ -28,8 +30,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   transition: 'background-color 0.2s ease',
 }));
 
-// Estilo para celdas del cuerpo con bordes verticales
-export const BodyTableCell = styled(TableCell)(({ theme, hasrightborder = "false" }) => ({
+export const BodyTableCell = styled(TableCell)<StyledCellProps>(({ theme, hasrightborder = "false" }) => ({
   padding: '12px',
   borderRight: hasrightborder === "true" ? '1px solid #e0e0e0' : 'none',
   position: 'relative',

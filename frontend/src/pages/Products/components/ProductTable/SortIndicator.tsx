@@ -1,7 +1,11 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 
-const SortIndicator = ({ isActive, direction }) => {
+interface Props {
+  isActive: boolean;
+  direction: 'asc' | 'desc'; 
+}
+
+const SortIndicator = ({ isActive, direction }: Props) => {
   return (
     <Box component="span" className="sort-indicator">
       {isActive ? (

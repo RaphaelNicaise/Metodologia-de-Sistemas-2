@@ -1,22 +1,30 @@
 import React from 'react';
 import './SearchInput.css';
-const SearchInput = ({ onSearch, placeholder = "search your chats" }) => {
-  const handleReset = (e) => {
+
+interface Props {
+  onSearch?: (searchValue: string) => void;
+  placeholder?: string;
+}
+
+const SearchInput = ({ onSearch, placeholder = "search your chats" }: Props) => {
+  
+  const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Lógica para resetear la búsqueda
     if (onSearch) onSearch('');
   };
 
   return (
     <form className="form">
       <label htmlFor="search">
-        <input 
-          required 
-          autoComplete="off" 
-          placeholder={placeholder} 
-          id="search" 
-          type="text" 
-          onChange={(e) => onSearch && onSearch(e.target.value)}
+        <input
+          required
+          autoComplete="off"
+          placeholder={placeholder}
+          id="search"
+          type="text"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+            onSearch && onSearch(e.target.value)
+          }
         />
         <div className="icon">
           <svg strokeWidth={2} stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="swap-on">
