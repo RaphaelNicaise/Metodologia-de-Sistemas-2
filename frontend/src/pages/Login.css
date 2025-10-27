@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Contenedor de la página completa */
+.app-login-page {
+  font-family: "Roboto Condensed", sans-serif;
+  background: #2651a9; /* Color del .page-login original */
+}
+
+/* Tarjeta de Login */
+.app-login-card {
+  background: #1c3c7d; /* Color del .login-container original */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  width: 500px;
+  max-width: 95%; /* Para móviles */
+}
+
+.app-login-card h2 {
+  font-size: 40px; /* Tamaño de fuente del original */
+}
+
+/* --- ESTILOS PARA EL FLOATING LABEL (TEMA OSCURO) ---
+   Esto es necesario para que los inputs se vean bien
+   sobre el fondo oscuro de la tarjeta.
+*/
+
+/* Texto del input */
+.app-login-card .form-control {
+  color: white;
+  background-color: transparent;
+  border-color: #4a6aa7; /* Un borde más suave */
+}
+
+/* Borde al hacer focus */
+.app-login-card .form-control:focus {
+  color: white;
+  background-color: transparent;
+  border-color: white;
+  box-shadow: none; /* Quitar el box-shadow azul de Bootstrap */
+}
+
+/* Color de la etiqueta flotante (cuando está arriba o abajo) */
+.app-login-card .form-floating > label {
+  color: #c0d0ff; /* Un color de placeholder más suave */
+}
+
+/* Arreglo para el color de fondo de autocompletar de Chrome */
+.app-login-card .form-control:-webkit-autofill,
+.app-login-card .form-control:-webkit-autofill:hover,
+.app-login-card .form-control:-webkit-autofill:focus,
+.app-login-card .form-control:-webkit-autofill:active {
+  /* Hacemos que el fondo del autocompletar sea el mismo de la card */
+  -webkit-box-shadow: 0 0 0 30px #1c3c7d inset !important;
+  /* Hacemos que el texto del autocompletar sea blanco */
+  -webkit-text-fill-color: white !important;
+}
+
+/* Link de "olvidaste contraseña" */
+.login-link {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+.login-link:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Botón de Iniciar Sesión */
+.login-submit-btn {
+  /* Heredamos algunos estilos del botón original */
+  font-weight: bold;
+  letter-spacing: 3px; /* Un poco menos que el original */
+  text-transform: uppercase;
+  color: #214998; /* Color de texto del original */
+  padding: 0.75rem 1rem; /* Ajuste del padding */
+}
+
+.login-submit-btn:hover {
+  color: #1c3c7d;
+  background-color: #f8f9fa; /* Color de hover estándar */
+  transform: scale(1.02); /* Efecto de hover sutil */
+}

@@ -1,0 +1,96 @@
+.sortable-header {
+  cursor: pointer;
+  user-select: none; 
+  transition: background-color 0.2s ease;
+}
+
+.sortable-header:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sort-indicator {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.sort-arrow {
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #333;
+}
+
+.sort-indicator-inactive {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #aaa; 
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.sortable-header:hover .sort-indicator-inactive {
+  opacity: 1;
+}
+
+.sort-arrow-small {
+  font-size: 10px;
+  line-height: 0.8;
+}
+
+
+.product-image {
+  max-width: 80px; 
+  height: auto;
+  max-height: 80px;
+  object-fit: cover;
+  border-radius: 4px; 
+}
+
+.action-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  font-size: 1.5rem; 
+  padding: 0.25rem;
+  line-height: 1;
+  text-decoration: none !important; 
+  border-radius: 50%;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit {
+  color: #0d6efd;
+}
+.btn-edit:hover {
+  color: #0a58ca;
+}
+
+.btn-erase {
+  color: #dc3545;
+}
+.btn-erase:hover {
+  color: #bb2d3b;
+}
+
+.btn-disabled {
+  color: #adb5bd;
+  pointer-events: none;
+  opacity: 0.65;
+}

@@ -1,7 +1,18 @@
 import React, { useState, useRef } from "react";
+import {
+  Modal,
+  Button,
+  Form,
+  Row,
+  Col,
+  Alert,
+  Spinner,
+  Image,
+  CloseButton
+} from 'react-bootstrap';
 import useCreateProduct from "../../../hooks/useCreateProduct";
-import type { CreateProductData } from "../../../types/Product"; 
-import '../../../styles/CreateProduct.css';
+import type { CreateProductData } from "../../../types/Product";
+import './CreateProduct.css';
 
 interface Props {
   onClose: () => void;
@@ -27,25 +38,18 @@ const CreateProduct = ({ onClose }: Props) => {
   };
 
   const [formData, setFormData] = useState<FormDataState>(initialFormData);
-
   const [images, setImages] = useState<File[]>([]);
   const [imagesPreviews, setImagesPreviews] = useState<string[]>([]);
   
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-
   const categories: string[] = [
-    'bebidas',
-    'alimentos',
-    'limpieza',
-    'electronicos',
-    'ropa',
-    'hogar',
-    'deportes',
-    'juguetes'
+    'bebidas', 'alimentos', 'limpieza', 'electronicos',
+    'ropa', 'hogar', 'deportes', 'juguetes'
   ];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -57,7 +61,6 @@ const CreateProduct = ({ onClose }: Props) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
       const previews = files.map(file => URL.createObjectURL(file));
-
       setImages(prev => [...prev, ...files]);
       setImagesPreviews(prev => [...prev, ...previews]);
     }
@@ -66,13 +69,10 @@ const CreateProduct = ({ onClose }: Props) => {
   const removeImage = (index: number) => {
     const newPreviews = [...imagesPreviews];
     const newImages = [...images];
-
     newPreviews.splice(index, 1);
     newImages.splice(index, 1);
-
     setImagesPreviews(newPreviews);
     setImages(newImages);
-
     if (newImages.length === 0 && fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -85,13 +85,12 @@ const CreateProduct = ({ onClose }: Props) => {
         name: formData.name,
         barcode: formData.barcode,
         category: formData.category,
-        price: parseFloat(formData.price), 
-        stock: parseInt(formData.stock) || 0, 
-        url_image: images.length > 0 ? images[0].name : '' 
+        price: parseFloat(formData.price),
+        stock: parseInt(formData.stock) || 0,
+        url_image: images.length > 0 ? images[0].name : ''
       };
       
       await createProduct(productDataToSubmit);
-
       setFormData(initialFormData);
       setImages([]);
       setImagesPreviews([]);
@@ -103,114 +102,180 @@ const CreateProduct = ({ onClose }: Props) => {
   };
 
   return (
-    <div className="add-product-container">
-      <div className="form-add-product">
-        <h2>Agregar producto</h2>
-        <div className="form-product-inputs">
+    <Modal
+      show={true}
+      onHide={onClose} 
+      size="xl" 
+      centered 
+      backdrop="static" 
+      keyboard={false} 
+      className="create-product-modal" 
+    >
+      <Form onSubmit={handleSubmit}>
+        <Modal.Header closeButton={!creating}>
+          <Modal.Title as="h2">Agregar producto</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
           {createError && (
-            <div className="error-message">
+            <Alert variant="danger">
               Error al crear producto: {createError}
-            </div>
+            </Alert>
           )}
 
-          <form onSubmit={handleSubmit} className="form-product-container">
-            <div className="form-product-inputs">
-              <span>Nombre del Producto<span style={{ color: "red" }}>*</span></span>
-              <input
-                type="text"
-                name="name"
-                placeholder="Ej: Coca-Cola, Pringles"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-              <span>Codigo de Barra<span style={{ color: "red" }}>*</span></span>
-              <input
-                type="text"
-                name="barcode"
-                placeholder="Ej: 0123456789"
-                value={formData.barcode}
-                onChange={handleInputChange}
-                required
-              />
-              <span>Precio<span style={{ color: "red" }}>*</span></span>
-              <input
-                type="number"
-                name="price"
-                placeholder="Ej: $10,000"
-                value={formData.price}
-                onChange={handleInputChange}
-                required
-              />
-              <span>Stock</span>
-              <input
-                type="number"
-                name="stock"
-                placeholder="Ej: 25"
-                value={formData.stock}
-                onChange={handleInputChange}
-              />
-              <span>Categoria<span style={{ color: "red" }}>*</span></span>
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Selecciona una categoría</option>
-                {categories.map((category, index) => (
-                  <option key={index} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-              <span>Imagen <span style={{ color: "grey" }}>(no es obligatorio)</span></span>
-              <input
-                type="file"
-                name="url_image"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleImageChange}
-              />
+          <Row>
+            <Col md={6}>
+              <Form.Group className="mb-3" controlId="formProductName">
+                <Form.Label>
+                  Nombre del Producto <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  placeholder="Ej: Coca-Cola, Pringles"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  disabled={creating}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formProductBarcode">
+                <Form.Label>
+                  Código de Barra <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="barcode"
+                  placeholder="Ej: 0123456789"
+                  value={formData.barcode}
+                  onChange={handleInputChange}
+                  required
+                  disabled={creating}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formProductPrice">
+                <Form.Label>
+                  Precio <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  name="price"
+                  placeholder="Ej: 10000"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  required
+                  disabled={creating}
+                  step="0.01" 
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formProductStock">
+                <Form.Label>Stock</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="stock"
+                  placeholder="Ej: 25"
+                  value={formData.stock}
+                  onChange={handleInputChange}
+                  disabled={creating}
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={6}>
+              <Form.Group className="mb-3" controlId="formProductCategory">
+                <Form.Label>
+                  Categoría <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  required
+                  disabled={creating}
+                >
+                  <option value="">Selecciona una categoría</option>
+                  {categories.map((category, index) => (
+                    <option key={index} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formProductImage">
+                <Form.Label>
+                  Imagen <span className="text-muted">(no es obligatorio)</span>
+                </Form.Label>
+                <Form.Control
+                  type="file"
+                  name="url_image"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  disabled={creating}
+                />
+              </Form.Group>
 
               {imagesPreviews.length > 0 && (
-                <div className="image-previews">
+                <div className="d-flex flex-wrap gap-2 mt-2">
                   {imagesPreviews.map((preview, index) => (
-                    <div key={index} className="image-preview">
-                      <img src={preview} alt={`Preview ${index}`} />
-                      <button
-                        type="button"
+                    <div key={index} className="image-preview-container">
+                      <Image
+                        src={preview}
+                        alt={`Preview ${index}`}
+                        thumbnail 
+                        className="image-preview-thumbnail"
+                      />
+                      <CloseButton
+                        variant="white" 
+                        className="image-preview-remove-btn"
                         onClick={() => removeImage(index)}
-                        className="remove-image-btn"
-                      >
-                        ×
-                      </button>
+                        disabled={creating}
+                        aria-label="Remove image"
+                      />
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-            <div className="form-buttons">
-              <button
-                type="button"
-                onClick={onClose}
-                disabled={creating}
-                id="btn-cancel"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={creating}
-                id="btn-add"
-              >
-                {creating ? 'Creando...' : 'Crear Producto'}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+            </Col>
+          </Row>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="danger" 
+            onClick={onClose}
+            disabled={creating}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="success" 
+            type="submit"
+            disabled={creating}
+          >
+            {creating ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Creando...
+              </>
+            ) : (
+              'Crear Producto'
+            )}
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
   );
 };
 

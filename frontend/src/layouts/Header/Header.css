@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+.app-header {
+    background-color: #1c3c7d;
+    height: 90px;
+    padding-left: 20px;
+}
+
+.app-header-title {
+    font-family: "Roboto Condensed", sans-serif;
+}

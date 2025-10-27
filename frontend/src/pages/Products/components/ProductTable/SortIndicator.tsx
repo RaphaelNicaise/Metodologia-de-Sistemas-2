@@ -1,24 +1,24 @@
-import Box from '@mui/material/Box';
-
 interface Props {
   isActive: boolean;
-  direction: 'asc' | 'desc'; 
+  direction: 'asc' | 'desc';
 }
 
 const SortIndicator = ({ isActive, direction }: Props) => {
   return (
-    <Box component="span" className="sort-indicator">
+    <span className="sort-indicator">
       {isActive ? (
-        direction === 'asc' ?
-          <span className="sort-arrow asc">▲</span> :
+        direction === 'asc' ? (
+          <span className="sort-arrow asc">▲</span>
+        ) : (
           <span className="sort-arrow desc">▼</span>
+        )
       ) : (
-        <Box className="sort-indicator-inactive">
+        <span className="sort-indicator-inactive">
           <span className="sort-arrow-small up">▲</span>
           <span className="sort-arrow-small down">▼</span>
-        </Box>
+        </span>
       )}
-    </Box>
+    </span>
   );
 };
 

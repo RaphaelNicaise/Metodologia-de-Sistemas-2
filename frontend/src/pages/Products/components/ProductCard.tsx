@@ -1,5 +1,7 @@
+import { Card, ListGroup } from 'react-bootstrap';
 import type { Product } from "../../../types/Product";
-import '../../../styles/Products.css';
+import './ProductCard.css';
+
 const ProductCard = ({
     name,
     barcode,
@@ -9,39 +11,44 @@ const ProductCard = ({
     category
 }: Product) => {
 
-
     const imageToShow = url_image || '/Image-not-found.png';
 
     return (
-        <div className="product-card">
-            <div className="product-image-container">
-                <img
-                    src={imageToShow}
-                    alt={name}
-                    className="product_image"
-                />
-            </div>
+        <Card className="h-100 shadow-sm product-card-rb">
+            
+            <Card.Img
+                variant="top"
+                src={imageToShow}
+                alt={name}
+                className="product-card-rb-image" 
+            />
 
-            <div className="product-card-info">
-                <h2 className="product-title">{name}</h2>
-                <p className="product-category">{category}</p>
 
-                <div className="product-card-meta">
-                    <div className="product-price">
+            <Card.Body className="d-flex flex-column">
+                
+                <Card.Title as="h2" className="product-title">{name}</Card.Title>
+                
+                <Card.Subtitle as="p" className="mb-2 text-muted product-category">
+                    {category}
+                </Card.Subtitle>
+
+                <ListGroup variant="flush" className="mt-auto product-card-meta">
+                    <ListGroup.Item className="d-flex justify-content-between">
                         <strong>Precio:</strong>
                         <span>${price}</span>
-                    </div>
-                    <div className="product-stock">
+                    </ListGroup.Item>
+                    <ListGroup.Item className="d-flex justify-content-between">
                         <strong>Stock:</strong>
                         <span>{stock}</span>
-                    </div>
-                    <div className="product-barcode">
-                        <strong>Codigo de Barra:</strong>
+                    </ListGroup.Item>
+                    <ListGroup.Item className="d-flex justify-content-between">
+                        <strong>Código de Barra:</strong>
                         <span>{barcode}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </ListGroup.Item>
+                </ListGroup>
+
+            </Card.Body>
+        </Card>
     )
 }
 

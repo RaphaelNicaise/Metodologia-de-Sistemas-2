@@ -1,73 +1,81 @@
-import '../styles/Navbar.css';
+import { Nav } from 'react-bootstrap';
+import './Navbar.css';
+
 import { LuChartLine } from "react-icons/lu";
-import { FaBell } from "react-icons/fa";
-import { FaShoppingCart } from "react-icons/fa";
-import { FaWineBottle } from "react-icons/fa";
+import { FaBell, FaShoppingCart, FaWineBottle, FaCreditCard, FaCalendarAlt, FaUserTie } from "react-icons/fa";
 import { FaShop } from "react-icons/fa6";
-import { FaUserTie } from "react-icons/fa6";
-import { FaCalendarAlt } from "react-icons/fa";
-import { FaCreditCard } from "react-icons/fa";
 
 const Navbar = () => {
     return (
-        <nav className="navbar-container">
-            <section className="navbar-section">
-                <h3 className="navbar-section-title">INFORMES</h3>
-                <div className="navbar-links">
-                    <a href="#dashboard" className="nav-link">
-                        <LuChartLine className="nav-icon"/>
+        <Nav as="nav" className="app-sidebar vh-100 bg-light border-end flex-column">
+            
+            <div className="app-sidebar-section">
+
+                <h3 className="app-sidebar-title text-muted text-uppercase fw-bold">
+                    INFORMES
+                </h3>
+                <div className="app-sidebar-links">
+
+                    <Nav.Link href="#dashboard" className="app-nav-link">
+                        <LuChartLine className="app-nav-icon"/>
                         <span>Dashboard</span>
-                    </a>
-                    <a href="#notificaciones" className="nav-link">
-                        <FaBell className="nav-icon"/>
+                    </Nav.Link>
+                    <Nav.Link href="#notificaciones" className="app-nav-link">
+                        <FaBell className="app-nav-icon"/>
                         <span>Notificaciones</span>
-                    </a>
+                    </Nav.Link>
                 </div>
-            </section>
+            </div>
             
-            <section className="navbar-section">
-                <h3 className="navbar-section-title">VENTAS</h3>
-                <div className="navbar-links">
-                    <a href="#ventas" className="nav-link">
-                        <FaShoppingCart className="nav-icon"/>
+            <div className="app-sidebar-section">
+                <h3 className="app-sidebar-title text-muted text-uppercase fw-bold">
+                    VENTAS
+                </h3>
+                <div className="app-sidebar-links">
+                    <Nav.Link href="#ventas" className="app-nav-link">
+                        <FaShoppingCart className="app-nav-icon"/>
                         <span>Registrar ventas</span>
-                    </a>
+                    </Nav.Link>
                 </div>
-            </section>
-            
-            <section className="navbar-section">
-                <h3 className="navbar-section-title">STOCK</h3>
-                <div className="navbar-links">
-                    <a href="/productos" className="nav-link">
-                        <FaWineBottle className="nav-icon"/>
+            </div>
+
+            <div className="app-sidebar-section">
+                <h3 className="app-sidebar-title text-muted text-uppercase fw-bold">
+                    STOCK
+                </h3>
+                <div className="app-sidebar-links">
+                    <Nav.Link href="/productos" className="app-nav-link">
+                        <FaWineBottle className="app-nav-icon"/>
                         <span>Productos</span>
-                    </a>
+                    </Nav.Link>
                 </div>
-            </section>
-            
-            <section className="navbar-section">
-                <h3 className="navbar-section-title">ADMINISTRACIÓN</h3>
-                <div className="navbar-links">
-                    <a href="#sucursales" className="nav-link">
-                        <FaShop className="nav-icon"/>
+            </div>
+
+            <div className="app-sidebar-section">
+                <h3 className="app-sidebar-title text-muted text-uppercase fw-bold">
+                    ADMINISTRACIÓN
+                </h3>
+                <div className="app-sidebar-links">
+                    <Nav.Link href="#sucursales" className="app-nav-link">
+                        <FaShop className="app-nav-icon"/>
                         <span>Local</span>
-                    </a>
-                    <a href="#empleados" className="nav-link">
-                        <FaUserTie className="nav-icon"/>
+                    </Nav.Link>
+                    <Nav.Link href="#empleados" className="app-nav-link">
+                        <FaUserTie className="app-nav-icon"/>
                         <span>Empleados</span>
-                    </a>
-                    <a href="#turnos" className="nav-link">
-                        <FaCalendarAlt className="nav-icon"/>
+                    </Nav.Link>
+                    <Nav.Link href="#turnos" className="app-nav-link">
+                        <FaCalendarAlt className="app-nav-icon"/>
                         <span>Turnos</span>
-                    </a>
-                    <a href="#pagos" className="nav-link">
-                        <FaCreditCard className="nav-icon"/>
+                    </Nav.Link>
+                    <Nav.Link href="#pagos" className="app-nav-link">
+                        <FaCreditCard className="app-nav-icon"/>
                         <span>Métodos de Pago</span>
-                    </a>
+                    </Nav.Link>
                 </div>
-            </section>
-        </nav>
-    )
+            </div>
+        </Nav>
+    );
 }
 
 export default Navbar;

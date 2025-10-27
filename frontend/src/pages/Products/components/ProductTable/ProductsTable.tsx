@@ -1,37 +1,27 @@
-import { useState, useMemo } from "react"; 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { useState, useMemo } from "react";
+import { Table, Card, Image, Button, Toast, ToastContainer, Alert } from 'react-bootstrap';
 import { MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import useDeleteProduct from "../../../../hooks/useDeleteProduct";
 import DeleteProductDialog from "./DeleteProductDialog";
 import SortableHeader from "./SortableHeader";
-import { StyledTableCell, StyledTableRow, BodyTableCell } from './ProductsTable.styles';
-import '../../../../styles/Products.css';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert'; 
-import type { AlertColor } from '@mui/material/Alert';
-import type{ Product } from "../../../../types/Product"; 
+import './ProductTable.css';
+import useDeleteProduct from "../../../../hooks/useDeleteProduct";
+import type { Product } from "../../../../types/Product";
 
 interface Props {
   products: Product[];
-  onEdit: (id: number) => void; 
-  onProductDeleted: (id: number) => void; 
+  onEdit: (id: number) => void;
+  onProductDeleted: (id: number) => void;
 }
 
 type Order = 'asc' | 'desc';
 type DeleteConfirmState = { id: number; name: string } | null;
 
-interface SnackbarState {
+type SnackbarState = {
   open: boolean;
   message: string;
-  severity: AlertColor; 
+  severity: 'success' | 'danger' | 'warning' | 'info'; 
 }
-
 
 type ProductSortKey = 'name' | 'category' | 'price' | 'stock';
 
@@ -47,7 +37,6 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
   });
 
   const { deleteProduct, loading } = useDeleteProduct();
-
 
   const handleSort = (property: ProductSortKey) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -75,7 +64,7 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
         onProductDeleted(deleteConfirm.id);
       }
 
-      window.location.reload();
+      window.location.reload(); 
 
     } catch (err) {
       let message = "Error al eliminar el producto";
@@ -85,7 +74,7 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
       setSnackbar({
         open: true,
         message: message,
-        severity: 'error'
+        severity: 'danger' 
       });
     } finally {
       setDeleteConfirm(null);
@@ -102,8 +91,7 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
 
   const sortedProducts = useMemo(() => {
     return [...products].sort((a: Product, b: Product) => {
-
-      const aValue = a[orderBy]; 
+      const aValue = a[orderBy];
       const bValue = b[orderBy];
 
       if (typeof aValue === 'string' && typeof bValue === 'string') {
@@ -120,98 +108,101 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
         return 0;
       }
       
-      return 0; 
+      return 0;
     });
   }, [products, orderBy, order]);
 
   return (
     <>
-      <TableContainer
-        component={Paper}
-        className="table-container"
-      >
-        <Table className="products-table">
-          <TableHead>
-            <TableRow>
-              <SortableHeader
-                label="Nombre"
-                property="name"
-                hasRightBorder
-                isActive={orderBy === 'name'}
-                direction={order}
-                onSort={handleSort}
-              />
-              <SortableHeader
-                label="Categoría"
-                property="category"
-                hasRightBorder
-                isActive={orderBy === 'category'}
-                direction={order}
-                onSort={handleSort}
-              />
-              <SortableHeader
-                label="Precio"
-                property="price"
-                hasRightBorder
-                isActive={orderBy === 'price'}
-                direction={order}
-                onSort={handleSort}
-              />
-              <SortableHeader
-                label="Stock"
-                property="stock"
-                hasRightBorder
-                isActive={orderBy === 'stock'}
-                direction={order}
-                onSort={handleSort}
-              />
-              <StyledTableCell>Código de Barra</StyledTableCell>
-              <StyledTableCell align="center">Acciones</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortedProducts.map(({ id, name, barcode, price, stock, url_image, category }) => {
-              
-              const imageToShow = url_image || '/Image-not-found.png';
-              
-              return (
-                <StyledTableRow key={id}>
-                  <BodyTableCell hasrightborder="true">
-                    <img
-                      src={imageToShow}
-                      alt={name}
-                      className="product-image"
-                    />
-                  </BodyTableCell>
-                  <BodyTableCell hasrightborder="true">{name}</BodyTableCell>
-                  <BodyTableCell hasrightborder="true">{category}</BodyTableCell>
-                  <BodyTableCell hasrightborder="true">${price}</BodyTableCell>
-                  <BodyTableCell hasrightborder="true">{stock}</BodyTableCell>
-                  <BodyTableCell>{barcode}</BodyTableCell>
-                  <BodyTableCell>
-                    <div className="btn">
-                      <div
-                        className={`btn-edit ${loading ? 'btn-disabled' : ''}`}
-                        onClick={() => onEdit && onEdit(id)}
-                        title={loading ? "Espere..." : "Editar producto"}
-                      >
-                        <FaEdit />
+      <Card className="table-container shadow-sm">
+        <Card.Body>
+
+          <Table striped bordered hover responsive className="products-table">
+            <thead>
+              <tr>
+                <th style={{ width: '100px' }}>Imagen</th> 
+                
+                <SortableHeader
+                  label="Nombre"
+                  property="name"
+                  isActive={orderBy === 'name'}
+                  direction={order}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  label="Categoría"
+                  property="category"
+                  isActive={orderBy === 'category'}
+                  direction={order}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  label="Precio"
+                  property="price"
+                  isActive={orderBy === 'price'}
+                  direction={order}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  label="Stock"
+                  property="stock"
+                  isActive={orderBy === 'stock'}
+                  direction={order}
+                  onSort={handleSort}
+                />
+                <th>Código de Barra</th>
+                <th className="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedProducts.map(({ id, name, barcode, price, stock, url_image, category }) => {
+                
+                const imageToShow = url_image || '/Image-not-found.png';
+                
+                return (
+                  <tr key={id}>
+                    <td className="text-center align-middle">
+                      <Image
+                        src={imageToShow}
+                        alt={name}
+                        className="product-image" 
+                        thumbnail 
+                      />
+                    </td>
+                    <td className="align-middle">{name}</td>
+                    <td className="align-middle">{category}</td>
+                    <td className="align-middle">${price}</td>
+                    <td className="align-middle">{stock}</td>
+                    <td className="align-middle">{barcode}</td>
+                    <td className="align-middle">
+                      <div className="action-btn-container">
+                        <Button
+                          variant="link" 
+                          className={`action-btn btn-edit ${loading ? 'btn-disabled' : ''}`}
+                          onClick={() => onEdit && onEdit(id)}
+                          title={loading ? "Espere..." : "Editar producto"}
+                          disabled={loading}
+                        >
+                          <FaEdit />
+                        </Button>
+                        <Button
+                          variant="link"
+                          className={`action-btn btn-erase ${loading ? 'btn-disabled' : ''}`}
+                          onClick={() => !loading && handleDeleteClick(id, name)}
+                          title={loading ? "Eliminando..." : "Eliminar producto"}
+                          disabled={loading}
+                        >
+                          <MdCancel />
+                        </Button>
                       </div>
-                      <div
-                        className={`btn-erase ${loading ? 'btn-disabled' : ''}`}
-                        onClick={() => !loading && handleDeleteClick(id, name)}
-                        title={loading ? "Eliminando..." : "Eliminar producto"}
-                      >
-                        <MdCancel />
-                      </div>
-                    </div>
-                  </BodyTableCell>
-                </StyledTableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
 
       <DeleteProductDialog
         open={!!deleteConfirm}
@@ -221,21 +212,32 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
         onConfirm={confirmDelete}
       />
 
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={closeSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        className="custom-snackbar"
+ 
+      <ToastContainer
+        position="bottom-end" 
+        className="p-3" 
+        style={{ zIndex: 9999 }} 
       >
-        <Alert
+        <Toast
+          show={snackbar.open} 
           onClose={closeSnackbar}
-          severity={snackbar.severity}
-          className="snackbar-alert"
+          delay={6000} 
+          autohide
+          bg={snackbar.severity === 'danger' ? 'danger' : snackbar.severity}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            variant={snackbar.severity}
+            onClose={closeSnackbar}
+            dismissible
+            className="mb-0" 
+          >
+            <Alert.Heading as="h6" className="mb-1">
+              {snackbar.severity === 'success' ? 'Éxito' : 'Error'}
+            </Alert.Heading>
+            {snackbar.message}
+          </Alert>
+        </Toast>
+      </ToastContainer>
     </>
   );
 };
