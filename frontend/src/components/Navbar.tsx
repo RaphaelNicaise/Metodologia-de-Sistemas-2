@@ -16,7 +16,7 @@ const Navbar = () => {
                 </h3>
                 <div className="app-sidebar-links">
 
-                    <Nav.Link href="#dashboard" className="app-nav-link">
+                    <Nav.Link href="/dashboard" className="app-nav-link">
                         <LuChartLine className="app-nav-icon"/>
                         <span>Dashboard</span>
                     </Nav.Link>
