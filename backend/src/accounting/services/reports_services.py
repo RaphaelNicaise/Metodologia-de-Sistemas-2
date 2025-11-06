@@ -1,4 +1,4 @@
-# src/accounting/services/reports.py
+# src/accounting/services/reports_services.py
 
 from src.db import Database
 from datetime import datetime, timedelta
@@ -12,23 +12,27 @@ class ReportsService:
         # Ventas del día
         sales_query = """
         SELECT COUNT(*) as total_sales, COALESCE(SUM(total_amount), 0) as total_amount,
-            payment_method, COALESCE(SUM(total_amount), 0) as amount_by_method
+               payment_method, COALESCE(SUM(total_amount), 0) as amount_by_method
         FROM sales 
         WHERE DATE(sale_date) = %s
         GROUP BY payment_method
         """
-        sales_results = self.db.execute(sales_query, (date,))
-        sales_by_method = [dict(row) for row in sales_results]
+        sales_results_cursor = self.db.execute(sales_query, (date,))
+        # --- CAMBIO AQUÍ ---
+        results = sales_results_cursor.fetchall() # Obtiene todos los resultados
+        sales_by_method = [dict(row) for row in results] # Procesa la lista
+        sales_results_cursor.close()  
         
-        # Total general de ventas
+        # Total general de ventas (fetchone está BIEN, no necesita cambios)
         total_sales_query = """
         SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
         FROM sales WHERE DATE(sale_date) = %s
         """
         cursor = self.db.execute(total_sales_query, (date,))
         total_sales_result = cursor.fetchone()
+        cursor.close()  
         
-        # Gastos del día (separados por tipo)
+        # Gastos del día (fetchone está BIEN)
         cash_expenses_query = """
         SELECT COALESCE(SUM(amount), 0) as total
         FROM expenses 
@@ -36,7 +40,9 @@ class ReportsService:
         """
         cursor = self.db.execute(cash_expenses_query, (date, '%CAJA%', '%EFECTIVO%'))
         cash_expenses_result = cursor.fetchone()
+        cursor.close()  
         
+        # Otros gastos (fetchone está BIEN)
         other_expenses_query = """
         SELECT COALESCE(SUM(amount), 0) as total
         FROM expenses 
@@ -44,6 +50,7 @@ class ReportsService:
         """
         cursor = self.db.execute(other_expenses_query, (date, '%CAJA%', '%EFECTIVO%'))
         other_expenses_result = cursor.fetchone()
+        cursor.close()  
         
         # Gastos por categoría
         expenses_by_category_query = """
@@ -53,8 +60,11 @@ class ReportsService:
         GROUP BY category
         ORDER BY total DESC
         """
-        expenses_results = self.db.execute(expenses_by_category_query, (date,))
-        expenses_by_category = [dict(row) for row in expenses_results]
+        expenses_cursor = self.db.execute(expenses_by_category_query, (date,))
+        # --- CAMBIO AQUÍ ---
+        results = expenses_cursor.fetchall()
+        expenses_by_category = [dict(row) for row in results]
+        expenses_cursor.close()  
         
         # Productos más vendidos
         top_products_query = """
@@ -68,27 +78,34 @@ class ReportsService:
         ORDER BY total_sold DESC
         LIMIT 10
         """
-        top_products_results = self.db.execute(top_products_query, (date,))
-        top_products = [dict(row) for row in top_products_results]
+        top_products_cursor = self.db.execute(top_products_query, (date,))
+        # --- CAMBIO AQUÍ ---
+        results = top_products_cursor.fetchall()
+        top_products = [dict(row) for row in results]
+        top_products_cursor.close()  
         
         # Movimientos de stock del día
         stock_movements_query = """
         SELECT sm.movement_type, SUM(sm.quantity) as total_quantity,
-            COUNT(*) as total_movements
+               COUNT(*) as total_movements
         FROM stock_movements sm
         WHERE DATE(sm.movement_date) = %s
         GROUP BY sm.movement_type
         """
-        stock_results = self.db.execute(stock_movements_query, (date,))
-        stock_movements = [dict(row) for row in stock_results]
+        stock_cursor = self.db.execute(stock_movements_query, (date,))
+        # --- CAMBIO AQUÍ ---
+        results = stock_cursor.fetchall()
+        stock_movements = [dict(row) for row in results]
+        stock_cursor.close()  
         
-        # Facturas pendientes
+        # Facturas pendientes (fetchone está BIEN)
         pending_invoices_query = """
         SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
         FROM sales WHERE invoice_state = 'pendiente'
         """
         cursor = self.db.execute(pending_invoices_query)
         pending_invoices_result = cursor.fetchone()
+        cursor.close()  
         
         return {
             "date": date,
@@ -109,7 +126,7 @@ class ReportsService:
                 "total_amount": float(pending_invoices_result["total"]) if pending_invoices_result else 0.0
             },
             "cash_balance": (float(total_sales_result["total"]) if total_sales_result else 0.0) - 
-                        (float(cash_expenses_result["total"]) if cash_expenses_result else 0.0)
+                            (float(cash_expenses_result["total"]) if cash_expenses_result else 0.0)
         }
 
     def get_monthly_report(self, year, month):
@@ -117,16 +134,19 @@ class ReportsService:
         # Ventas mensuales por día
         daily_sales_query = """
         SELECT DATE(sale_date) as date, COUNT(*) as sales_count, 
-            COALESCE(SUM(total_amount), 0) as total_amount
+               COALESCE(SUM(total_amount), 0) as total_amount
         FROM sales 
         WHERE YEAR(sale_date) = %s AND MONTH(sale_date) = %s
         GROUP BY DATE(sale_date)
         ORDER BY date
         """
-        daily_sales_results = self.db.execute(daily_sales_query, (year, month))
-        daily_sales = [dict(row) for row in daily_sales_results]
+        daily_sales_results_cursor = self.db.execute(daily_sales_query, (year, month))
+        # --- CAMBIO AQUÍ ---
+        results = daily_sales_results_cursor.fetchall()
+        daily_sales = [dict(row) for row in results]
+        daily_sales_results_cursor.close()  
         
-        # Totales mensuales
+        # Totales mensuales (fetchone está BIEN)
         monthly_totals_query = """
         SELECT COUNT(*) as total_sales, COALESCE(SUM(total_amount), 0) as total_revenue
         FROM sales 
@@ -134,6 +154,7 @@ class ReportsService:
         """
         cursor = self.db.execute(monthly_totals_query, (year, month))
         monthly_totals_result = cursor.fetchone()
+        cursor.close()  
         
         # Gastos mensuales
         monthly_expenses_query = """
@@ -143,8 +164,11 @@ class ReportsService:
         GROUP BY category
         ORDER BY total DESC
         """
-        monthly_expenses_results = self.db.execute(monthly_expenses_query, (year, month))
-        monthly_expenses = [dict(row) for row in monthly_expenses_results]
+        monthly_expenses_cursor = self.db.execute(monthly_expenses_query, (year, month))
+        # --- CAMBIO AQUÍ ---
+        results = monthly_expenses_cursor.fetchall()
+        monthly_expenses = [dict(row) for row in results]
+        monthly_expenses_cursor.close()  
         
         # Productos más vendidos del mes
         top_products_monthly_query = """
@@ -158,8 +182,11 @@ class ReportsService:
         ORDER BY total_sold DESC
         LIMIT 20
         """
-        top_products_monthly_results = self.db.execute(top_products_monthly_query, (year, month))
-        top_products_monthly = [dict(row) for row in top_products_monthly_results]
+        top_products_monthly_cursor = self.db.execute(top_products_monthly_query, (year, month))
+        # --- CAMBIO AQUÍ ---
+        results = top_products_monthly_cursor.fetchall()
+        top_products_monthly = [dict(row) for row in results]
+        top_products_monthly_cursor.close()  
         
         # Cierres de caja del mes
         cash_closures_query = """
@@ -168,10 +195,13 @@ class ReportsService:
         WHERE YEAR(closure_date) = %s AND MONTH(closure_date) = %s
         ORDER BY closure_date
         """
-        cash_closures_results = self.db.execute(cash_closures_query, (year, month))
-        cash_closures = [dict(row) for row in cash_closures_results]
+        cash_closures_cursor = self.db.execute(cash_closures_query, (year, month))
+        # --- CAMBIO AQUÍ ---
+        results = cash_closures_cursor.fetchall()
+        cash_closures = [dict(row) for row in results]
+        cash_closures_cursor.close()  
         
-        # Comparación con mes anterior
+        # Comparación con mes anterior (fetchone está BIEN)
         prev_month = month - 1 if month > 1 else 12
         prev_year = year if month > 1 else year - 1
         
@@ -182,6 +212,7 @@ class ReportsService:
         """
         cursor = self.db.execute(prev_month_query, (prev_year, prev_month))
         prev_month_result = cursor.fetchone()
+        cursor.close()  
         
         current_revenue = float(monthly_totals_result["total_revenue"]) if monthly_totals_result else 0.0
         prev_revenue = float(prev_month_result["total_revenue"]) if prev_month_result else 0.0
@@ -205,14 +236,17 @@ class ReportsService:
         # Ventas por mes
         monthly_sales_query = """
         SELECT MONTH(sale_date) as month, COUNT(*) as sales_count, 
-            COALESCE(SUM(total_amount), 0) as total_amount
+               COALESCE(SUM(total_amount), 0) as total_amount
         FROM sales 
         WHERE YEAR(sale_date) = %s
         GROUP BY MONTH(sale_date)
         ORDER BY month
         """
-        monthly_sales_results = self.db.execute(monthly_sales_query, (year,))
-        monthly_sales = [dict(row) for row in monthly_sales_results]
+        monthly_sales_cursor = self.db.execute(monthly_sales_query, (year,))
+        # --- CAMBIO AQUÍ ---
+        results = monthly_sales_cursor.fetchall()
+        monthly_sales = [dict(row) for row in results]
+        monthly_sales_cursor.close()  
         
         # Gastos anuales por categoría
         yearly_expenses_query = """
@@ -222,8 +256,11 @@ class ReportsService:
         GROUP BY category
         ORDER BY total DESC
         """
-        yearly_expenses_results = self.db.execute(yearly_expenses_query, (year,))
-        yearly_expenses = [dict(row) for row in yearly_expenses_results]
+        yearly_expenses_cursor = self.db.execute(yearly_expenses_query, (year,))
+        # --- CAMBIO AQUÍ ---
+        results = yearly_expenses_cursor.fetchall()
+        yearly_expenses = [dict(row) for row in results]
+        yearly_expenses_cursor.close()  
         
         # Top productos del año
         top_products_yearly_query = """
@@ -237,18 +274,22 @@ class ReportsService:
         ORDER BY total_revenue DESC
         LIMIT 30
         """
-        top_products_yearly_results = self.db.execute(top_products_yearly_query, (year,))
-        top_products_yearly = [dict(row) for row in top_products_yearly_results]
+        top_products_yearly_cursor = self.db.execute(top_products_yearly_query, (year,))
+        # --- CAMBIO AQUÍ ---
+        results = top_products_yearly_cursor.fetchall()
+        top_products_yearly = [dict(row) for row in results]
+        top_products_yearly_cursor.close()  
         
-        # Resumen anual
+        # Resumen anual (fetchone está BIEN)
         yearly_summary_query = """
         SELECT COUNT(*) as total_sales, COALESCE(SUM(total_amount), 0) as total_revenue,
-            AVG(total_amount) as avg_sale_amount
+               AVG(total_amount) as avg_sale_amount
         FROM sales 
         WHERE YEAR(sale_date) = %s
         """
         cursor = self.db.execute(yearly_summary_query, (year,))
         yearly_summary_result = cursor.fetchone()
+        cursor.close()  
         
         return {
             "year": year,
@@ -270,48 +311,54 @@ class ReportsService:
         last_month_start = (this_month_start - timedelta(days=1)).replace(day=1)
         last_month_end = this_month_start - timedelta(days=1)
         
-        # Ventas de hoy
+        # Ventas de hoy (fetchone está BIEN)
         today_sales_query = """
         SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
         FROM sales WHERE DATE(sale_date) = %s
         """
         cursor = self.db.execute(today_sales_query, (today,))
         today_sales = cursor.fetchone()
+        cursor.close()  
         
-        # Ventas de ayer
+        # Ventas de ayer (fetchone está BIEN)
         cursor = self.db.execute(today_sales_query, (yesterday,))
         yesterday_sales = cursor.fetchone()
+        cursor.close()  
         
-        # Ventas del mes actual
+        # Ventas del mes actual (fetchone está BIEN)
         month_sales_query = """
         SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
         FROM sales WHERE sale_date >= %s
         """
         cursor = self.db.execute(month_sales_query, (this_month_start,))
         month_sales = cursor.fetchone()
+        cursor.close()  
         
-        # Ventas del mes pasado
+        # Ventas del mes pasado (fetchone está BIEN)
         last_month_sales_query = """
         SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
         FROM sales WHERE sale_date >= %s AND sale_date <= %s
         """
         cursor = self.db.execute(last_month_sales_query, (last_month_start, last_month_end))
         last_month_sales = cursor.fetchone()
+        cursor.close()  
         
-        # Productos con stock bajo
+        # Productos con stock bajo (fetchone está BIEN)
         low_stock_query = """
         SELECT COUNT(*) as count FROM products WHERE stock <= 10
         """
         cursor = self.db.execute(low_stock_query)
         low_stock_result = cursor.fetchone()
+        cursor.close()  
         
-        # Facturas pendientes
+        # Facturas pendientes (fetchone está BIEN)
         pending_invoices_query = """
         SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
         FROM sales WHERE invoice_state = 'pendiente'
         """
         cursor = self.db.execute(pending_invoices_query)
         pending_invoices = cursor.fetchone()
+        cursor.close()  
         
         # Top 5 productos más vendidos del mes
         top_products_query = """
@@ -324,8 +371,11 @@ class ReportsService:
         ORDER BY total_sold DESC
         LIMIT 5
         """
-        top_products_results = self.db.execute(top_products_query, (this_month_start,))
-        top_products = [dict(row) for row in top_products_results]
+        top_products_cursor = self.db.execute(top_products_query, (this_month_start,))
+        # --- CAMBIO AQUÍ ---
+        results = top_products_cursor.fetchall()
+        top_products = [dict(row) for row in results]
+        top_products_cursor.close()  
         
         # Calcular porcentajes de crecimiento
         today_growth = 0
@@ -369,9 +419,9 @@ class ReportsService:
         
         query = """
         SELECT p.id, p.name, p.price, p.stock,
-            COALESCE(SUM(sp.quantity), 0) as total_sold,
-            COALESCE(SUM(sp.quantity * sp.unit_price), 0) as total_revenue,
-            COALESCE(COUNT(DISTINCT s.id), 0) as times_sold
+               COALESCE(SUM(sp.quantity), 0) as total_sold,
+               COALESCE(SUM(sp.quantity * sp.unit_price), 0) as total_revenue,
+               COALESCE(COUNT(DISTINCT s.id), 0) as times_sold
         FROM products p
         LEFT JOIN sale_product sp ON p.id = sp.product_id
         LEFT JOIN sales s ON sp.sale_id = s.id AND DATE(s.sale_date) >= %s
@@ -379,10 +429,13 @@ class ReportsService:
         ORDER BY total_revenue DESC
         LIMIT %s
         """
-        results = self.db.execute(query, (start_date, limit))
+        results_cursor = self.db.execute(query, (start_date, limit))
+        # --- CAMBIO AQUÍ ---
+        results = results_cursor.fetchall()
+        results_cursor.close()  
         
         products = []
-        for row in results:
+        for row in results: # Itera sobre la lista 'results', no sobre el cursor
             product = dict(row)
             product["total_revenue"] = float(product["total_revenue"])
             product["profit_margin"] = float(product["price"]) * int(product["total_sold"]) if product["total_sold"] else 0
@@ -395,13 +448,14 @@ class ReportsService:
 
     def get_customer_insights(self):
         """Obtiene insights básicos de clientes (basado en ventas)"""
-        # Promedio de venta
+        # Promedio de venta (fetchone está BIEN)
         avg_sale_query = """
         SELECT AVG(total_amount) as avg_amount, COUNT(*) as total_sales
         FROM sales
         """
         cursor = self.db.execute(avg_sale_query)
         avg_result = cursor.fetchone()
+        cursor.close()  
         
         # Distribución por método de pago
         payment_distribution_query = """
@@ -411,8 +465,11 @@ class ReportsService:
         GROUP BY payment_method
         ORDER BY total DESC
         """
-        payment_results = self.db.execute(payment_distribution_query)
-        payment_distribution = [dict(row) for row in payment_results]
+        payment_results_cursor = self.db.execute(payment_distribution_query)
+        # --- CAMBIO AQUÍ ---
+        results = payment_results_cursor.fetchall()
+        payment_distribution = [dict(row) for row in results]
+        payment_results_cursor.close()  
         
         # Ventas por hora del día (últimos 30 días)
         hourly_sales_query = """
@@ -424,8 +481,11 @@ class ReportsService:
         ORDER BY hour
         """
         thirty_days_ago = datetime.now() - timedelta(days=30)
-        hourly_results = self.db.execute(hourly_sales_query, (thirty_days_ago,))
-        hourly_sales = [dict(row) for row in hourly_results]
+        hourly_results_cursor = self.db.execute(hourly_sales_query, (thirty_days_ago,))
+        # --- CAMBIO AQUÍ ---
+        results = hourly_results_cursor.fetchall()
+        hourly_sales = [dict(row) for row in results]
+        hourly_results_cursor.close()  
         
         return {
             "average_sale": {

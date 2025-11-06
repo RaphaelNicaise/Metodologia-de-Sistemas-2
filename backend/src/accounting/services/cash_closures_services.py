@@ -1,5 +1,3 @@
-# src/accounting/services/cash_closures_services.py
-
 from src.accounting.models.cash_closures import CashClosure
 from src.db import Database
 from datetime import datetime
@@ -46,6 +44,7 @@ class CashClosureService:
             
             cursor = self.db.execute(query, params)
             closure_id = cursor.lastrowid
+            cursor.close()  
             
             # Obtener el cierre creado con información completa
             return self.get_closure_with_details(closure_id), 201
@@ -85,13 +84,15 @@ class CashClosureService:
         ORDER BY cc.closure_date DESC
         LIMIT %s OFFSET %s
         """
-        results = self.db.execute(query, (limit, offset))
+        cursor = self.db.execute(query, (limit, offset))
+        results = cursor.fetchall() 
         closures = []
         for row in results:
             closure = CashClosure(**{k: v for k, v in row.items() if k != 'user_name'})
             closure_dict = closure.to_dict()
             closure_dict['user_name'] = row.get('user_name')
             closures.append(closure_dict)
+        cursor.close()  
         return closures
 
     def get_closure_by_id(self, closure_id):
@@ -99,6 +100,7 @@ class CashClosureService:
         query = "SELECT * FROM cash_closures WHERE id = %s"
         cursor = self.db.execute(query, (closure_id,))
         row = cursor.fetchone()
+        cursor.close()  
         return CashClosure(**row) if row else None
 
     def get_closure_by_date(self, closure_date):
@@ -106,6 +108,7 @@ class CashClosureService:
         query = "SELECT * FROM cash_closures WHERE closure_date = %s"
         cursor = self.db.execute(query, (closure_date,))
         row = cursor.fetchone()
+        cursor.close()  
         return CashClosure(**row) if row else None
 
     def get_closures_by_date_range(self, start_date, end_date):
@@ -117,13 +120,15 @@ class CashClosureService:
         WHERE cc.closure_date BETWEEN %s AND %s
         ORDER BY cc.closure_date DESC
         """
-        results = self.db.execute(query, (start_date, end_date))
+        cursor = self.db.execute(query, (start_date, end_date))
+        results = cursor.fetchall() 
         closures = []
         for row in results:
             closure = CashClosure(**{k: v for k, v in row.items() if k != 'user_name'})
             closure_dict = closure.to_dict()
             closure_dict['user_name'] = row.get('user_name')
             closures.append(closure_dict)
+        cursor.close()  
         return closures
 
     def get_monthly_summary(self, year, month):
@@ -140,6 +145,7 @@ class CashClosureService:
         """
         cursor = self.db.execute(query, (year, month))
         result = cursor.fetchone()
+        cursor.close()  
         return dict(result) if result else {}
 
     def _closure_exists_for_date(self, closure_date):
@@ -147,6 +153,7 @@ class CashClosureService:
         query = "SELECT COUNT(*) as count FROM cash_closures WHERE closure_date = %s"
         cursor = self.db.execute(query, (closure_date,))
         result = cursor.fetchone()
+        cursor.close()  
         return result["count"] > 0 if result else False
 
     def _user_can_close_cash(self, user_id):
@@ -154,6 +161,7 @@ class CashClosureService:
         query = "SELECT role FROM users WHERE id = %s"
         cursor = self.db.execute(query, (user_id,))
         result = cursor.fetchone()
+        cursor.close()  
         
         if not result:
             return False
@@ -168,6 +176,7 @@ class CashClosureService:
         query = "SELECT COALESCE(SUM(total_amount), 0) as total FROM sales WHERE DATE(sale_date) = %s"
         cursor = self.db.execute(query, (closure_date,))
         result = cursor.fetchone()
+        cursor.close()  
         total_sales = float(result["total"]) if result else 0.0
         
         # 2. Desglose de ventas por método de pago
@@ -177,8 +186,10 @@ class CashClosureService:
         WHERE DATE(sale_date) = %s
         GROUP BY payment_method
         """
-        results = self.db.execute(query, (closure_date,))
+        cursor = self.db.execute(query, (closure_date,))
+        results = cursor.fetchall() 
         sales_breakdown = {row["payment_method"]: float(row["total"]) for row in results}
+        cursor.close()  
         
         # 3. Gastos que afectan la caja (con "CAJA" o "EFECTIVO" en notes)
         query = """
@@ -189,6 +200,7 @@ class CashClosureService:
         """
         cursor = self.db.execute(query, (closure_date, '%CAJA%', '%EFECTIVO%'))
         result = cursor.fetchone()
+        cursor.close()  
         cash_expenses = float(result["total"]) if result else 0.0
         
         # 4. Otros gastos (no afectan caja)
@@ -200,6 +212,7 @@ class CashClosureService:
         """
         cursor = self.db.execute(query, (closure_date, '%CAJA%', '%EFECTIVO%'))
         result = cursor.fetchone()
+        cursor.close()  
         other_expenses = float(result["total"]) if result else 0.0
         
         # 5. Desglose de gastos por categoría
@@ -209,19 +222,23 @@ class CashClosureService:
         WHERE expense_date = %s
         GROUP BY category
         """
-        results = self.db.execute(query, (closure_date,))
+        cursor = self.db.execute(query, (closure_date,))
+        results = cursor.fetchall() 
         expenses_breakdown = {row["category"]: float(row["total"]) for row in results}
+        cursor.close()  
         
         # 6. Facturas pendientes
         query = "SELECT COUNT(*) as count FROM sales WHERE invoice_state = 'pendiente'"
         cursor = self.db.execute(query)
         result = cursor.fetchone()
+        cursor.close()  
         pending_invoices = result["count"] if result else 0
         
         # 7. Productos con stock bajo
         query = "SELECT COUNT(*) as count FROM products WHERE stock <= 10"
         cursor = self.db.execute(query)
         result = cursor.fetchone()
+        cursor.close()  
         low_stock_products = result["count"] if result else 0
         
         # Calcular balance final (ventas - solo gastos de caja)

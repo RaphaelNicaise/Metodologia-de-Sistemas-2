@@ -11,13 +11,17 @@ class ExpenseService:
         ORDER BY expense_date DESC
         LIMIT %s OFFSET %s
         """
-        results = self.db.execute(query, (limit, offset))
-        return [Expense(**row) for row in results]
+        cursor = self.db.execute(query, (limit, offset))
+        results = cursor.fetchall() 
+        expenses = [Expense(**row) for row in results]
+        cursor.close()  
+        return expenses
 
     def get_expense_by_id(self, expense_id):
         query = "SELECT * FROM expenses WHERE id = %s"
         cursor = self.db.execute(query, (expense_id,))
         row = cursor.fetchone()
+        cursor.close()  
         return Expense(**row) if row else None
 
     def create_expense(self, data):
@@ -35,6 +39,7 @@ class ExpenseService:
         try:
             cursor = self.db.execute(query, params)
             expense_id = cursor.lastrowid
+            cursor.close()  
             return self.get_expense_by_id(expense_id)
         except Exception as e:
             print(f"Error creando gasto: {e}")
@@ -55,7 +60,8 @@ class ExpenseService:
             expense_id,
         )
         try:
-            self.db.execute(query, params)
+            cursor = self.db.execute(query, params)
+            cursor.close()  
             return self.get_expense_by_id(expense_id)
         except Exception as e:
             print(f"Error actualizando gasto: {e}")
@@ -64,7 +70,8 @@ class ExpenseService:
     def delete_expense(self, expense_id):
         query = "DELETE FROM expenses WHERE id = %s"
         try:
-            self.db.execute(query, (expense_id,))
+            cursor = self.db.execute(query, (expense_id,))
+            cursor.close()  
             return True
         except Exception as e:
             print(f"Error borrando gasto: {e}")
@@ -76,8 +83,11 @@ class ExpenseService:
         WHERE category = %s
         ORDER BY expense_date DESC
         """
-        results = self.db.execute(query, (category,))
-        return [Expense(**row) for row in results]
+        cursor = self.db.execute(query, (category,))
+        results = cursor.fetchall() 
+        expenses = [Expense(**row) for row in results]
+        cursor.close()  
+        return expenses
 
     def get_expenses_by_date_range(self, start_date, end_date):
         query = """
@@ -85,8 +95,11 @@ class ExpenseService:
         WHERE expense_date BETWEEN %s AND %s
         ORDER BY expense_date DESC
         """
-        results = self.db.execute(query, (start_date, end_date))
-        return [Expense(**row) for row in results]
+        cursor = self.db.execute(query, (start_date, end_date))
+        results = cursor.fetchall() 
+        expenses = [Expense(**row) for row in results]
+        cursor.close()  
+        return expenses
 
     def get_expenses_summary_by_category(self):
         """Devuelve el total gastado por categoría"""
@@ -96,8 +109,11 @@ class ExpenseService:
         GROUP BY category
         ORDER BY total_amount DESC
         """
-        results = self.db.execute(query)
-        return [{"category": row["category"], "total_amount": row["total_amount"]} for row in results]
+        cursor = self.db.execute(query)
+        results = cursor.fetchall() 
+        summary = [{"category": row["category"], "total_amount": row["total_amount"]} for row in results]
+        cursor.close()  
+        return summary
 
     def get_monthly_summary(self, year):
         """Devuelve el gasto total por mes de un año"""
@@ -108,5 +124,8 @@ class ExpenseService:
         GROUP BY MONTH(expense_date)
         ORDER BY month
         """
-        results = self.db.execute(query, (year,))
-        return [{"month": row["month"], "total_amount": row["total_amount"]} for row in results]
+        cursor = self.db.execute(query, (year,))
+        results = cursor.fetchall() 
+        summary = [{"month": row["month"], "total_amount": row["total_amount"]} for row in results]
+        cursor.close()  
+        return summary
