@@ -1,4 +1,4 @@
-# src/accounting/routes/reports.py
+# backend/src/accounting/routes/reports_routes.py
 
 from flask import Blueprint, jsonify, request
 from src.accounting.services.reports_services import ReportsService
@@ -100,96 +100,22 @@ def get_today_quick_stats():
 @reports_bp.route("/quick-stats/week", methods=["GET"])
 def get_week_quick_stats():
     """Obtiene estadísticas rápidas de la semana"""
-    
-    
-    today = datetime.now().date()
-    week_start = today - timedelta(days=today.weekday())  # Lunes de esta semana
-    
-    # Ventas de la semana
-    week_sales_query = """
-    SELECT DATE(sale_date) as date, COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
-    FROM sales 
-    WHERE DATE(sale_date) >= %s
-    GROUP BY DATE(sale_date)
-    ORDER BY date
-    """
-    
-    db = service.db
-    results = db.execute(week_sales_query, (week_start,))
-    daily_sales = [dict(row) for row in results]
-    
-    # Totales de la semana
-    week_total_query = """
-    SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
-    FROM sales 
-    WHERE DATE(sale_date) >= %s
-    """
-    cursor = db.execute(week_total_query, (week_start,))
-    week_total = cursor.fetchone()
-    
-    return jsonify({
-        "week_start": week_start.strftime('%Y-%m-%d'),
-        "week_end": today.strftime('%Y-%m-%d'),
-        "total_sales": week_total["count"] if week_total else 0,
-        "total_amount": float(week_total["total"]) if week_total else 0.0,
-        "daily_breakdown": daily_sales
-    }), 200
+    report = service.get_weekly_quick_stats()
+    return jsonify(report), 200
+
 
 @reports_bp.route("/comparison", methods=["GET"])
 def get_comparison_report():
     """Compara períodos (hoy vs ayer, este mes vs mes pasado, etc.)"""
-    comparison_type = request.args.get("type", "daily")  # daily, monthly, yearly
-    
+    comparison_type = request.args.get("type", "daily")
+
     if comparison_type == "daily":
-        today = datetime.now().date()
-        yesterday = today - timedelta(days=1)
-        
-        today_report = service.get_daily_report(today.strftime('%Y-%m-%d'))
-        yesterday_report = service.get_daily_report(yesterday.strftime('%Y-%m-%d'))
-        
-        return jsonify({
-            "type": "daily",
-            "current": {
-                "date": today.strftime('%Y-%m-%d'),
-                "sales_count": today_report["sales"]["total_count"],
-                "sales_amount": today_report["sales"]["total_amount"],
-                "cash_balance": today_report["cash_balance"]
-            },
-            "previous": {
-                "date": yesterday.strftime('%Y-%m-%d'),
-                "sales_count": yesterday_report["sales"]["total_count"],
-                "sales_amount": yesterday_report["sales"]["total_amount"],
-                "cash_balance": yesterday_report["cash_balance"]
-            },
-            "growth": {
-                "sales_count": today_report["sales"]["total_count"] - yesterday_report["sales"]["total_count"],
-                "sales_amount": today_report["sales"]["total_amount"] - yesterday_report["sales"]["total_amount"],
-                "sales_percent": ((today_report["sales"]["total_amount"] - yesterday_report["sales"]["total_amount"]) / yesterday_report["sales"]["total_amount"] * 100) if yesterday_report["sales"]["total_amount"] > 0 else 0
-            }
-        }), 200
+        report = service.get_daily_comparison_report()
+        return jsonify(report), 200
     
     elif comparison_type == "monthly":
-        now = datetime.now()
-        current_month = now.month
-        current_year = now.year
-        
-        prev_month = current_month - 1 if current_month > 1 else 12
-        prev_year = current_year if current_month > 1 else current_year - 1
-        
-        current_report = service.get_monthly_report(current_year, current_month)
-        previous_report = service.get_monthly_report(prev_year, prev_month)
-        
-        return jsonify({
-            "type": "monthly",
-            "current": {
-                "period": f"{current_year}-{current_month:02d}",
-                "data": current_report["summary"]
-            },
-            "previous": {
-                "period": f"{prev_year}-{prev_month:02d}",
-                "data": previous_report["summary"]
-            }
-        }), 200
+        report = service.get_monthly_comparison_report()
+        return jsonify(report), 200
     
     else:
         return jsonify({"error": "Invalid comparison type. Use 'daily' or 'monthly'"}), 400
@@ -206,7 +132,6 @@ def export_daily_report(date):
     
     report = service.get_daily_report(date)
     
-    # Formato optimizado para exportación
     export_data = {
         "report_type": "daily",
         "date": date,
@@ -230,7 +155,6 @@ def get_business_alerts():
     
     alerts = []
     
-    # Alerta de stock bajo
     if kpis["alerts"]["low_stock_products"] > 0:
         alerts.append({
             "type": "warning",
@@ -239,7 +163,6 @@ def get_business_alerts():
             "action": "Revisar inventario y realizar pedidos"
         })
     
-    # Alerta de facturas pendientes
     if kpis["alerts"]["pending_invoices"]["count"] > 10:
         alerts.append({
             "type": "info",
@@ -248,7 +171,6 @@ def get_business_alerts():
             "action": "Procesar facturación AFIP"
         })
     
-    # Alerta de crecimiento negativo
     if kpis["today"]["growth_percent"] < -10:
         alerts.append({
             "type": "warning",

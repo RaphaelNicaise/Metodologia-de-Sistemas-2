@@ -1,0 +1,30 @@
+.dashboard-chart-card {
+    border: none;
+    border-radius: 0.5rem;
+    /* 8px */
+    height: 100%;
+}
+
+.dashboard-chart-card .card-body {
+    padding: 1.25rem;
+    /* 20px */
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-chart-card .card-title {
+    font-size: 0.9rem;
+    /* 14.4px */
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    /* 16px */
+}
+
+/* Contenedor para que el gráfico sea responsive */
+.chart-container {
+    position: relative;
+    height: 300px;
+    /* Altura fija para los gráficos */
+    width: 100%;
+}
