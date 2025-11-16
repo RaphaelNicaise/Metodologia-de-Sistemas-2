@@ -1,10 +1,10 @@
 // frontend/src/hooks/useCreateGasto.ts
 import { useState } from "react";
 import { createExpenseApi } from "../api/accountingService";
-import type { Expense, CreateExpenseData } from "../api/accountingService";
+import type { CreateExpenseData } from "../types/Expense";
 
 const useCreateGasto = () => {
-    const [data, setData] = useState<Expense | null>(null);
+    const [data, setData] = useState<Awaited<ReturnType<typeof createExpenseApi>> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 

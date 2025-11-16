@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Modal,
     Button,
@@ -8,42 +8,42 @@ import {
     Alert,
     Spinner,
 } from 'react-bootstrap';
-import useCreateGasto from "../../../hooks/useCreateGasto";
-import type { CreateExpenseData, Expense } from "../../../types/Expense"; 
+import useUpdateExpense from "../../../hooks/useUpdateExpense";
+import type { Expense, UpdateExpenseData } from "../../../types/Expense";
 
 interface Props {
+    expenseToEdit: Expense;
     onClose: () => void;
-    onExpenseCreated: (newExpense: Expense) => void;
+    onExpenseUpdated: (updatedExpense: Expense) => void;
 }
 
-interface FormDataState {
-    description: string;
-    category: string;
-    amount: string;
-    expense_date: string;
-    notes: string;
-}
 
 const categories: string[] = [
     'proveedores', 'utilitarios', 'impuestos', 'salarios', 'alquiler', 'mantenimiento', 'otros'
 ];
 
-const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
-    const { createGasto, loading, error } = useCreateGasto();
-    const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+const EditGasto = ({ expenseToEdit, onClose, onExpenseUpdated }: Props) => {
+    const { updateExpense, loading, error } = useUpdateExpense();
+    const [formData, setFormData] = useState({
+        description: expenseToEdit.description,
+        category: expenseToEdit.category,
+        amount: expenseToEdit.amount.toString(),
+        expense_date: new Date(expenseToEdit.expense_date).toISOString().split('T')[0], // Formato YYYY-MM-DD
+        notes: expenseToEdit.notes || '',
+    });
 
-    const initialFormData: FormDataState = {
-        description: '',
-        category: 'otros',
-        amount: '',
-        expense_date: today,
-        notes: '',
-    };
-
-    const [formData, setFormData] = useState<FormDataState>(initialFormData);
+    useEffect(() => {
+        setFormData({
+            description: expenseToEdit.description,
+            category: expenseToEdit.category,
+            amount: expenseToEdit.amount.toString(),
+            expense_date: new Date(expenseToEdit.expense_date).toISOString().split('T')[0],
+            notes: expenseToEdit.notes || '',
+        });
+    }, [expenseToEdit]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const name = e.target.name as keyof (typeof formData); 
+        const name = e.target.name as keyof (typeof formData);
         const value = e.target.value;
 
         setFormData(prev => ({
@@ -57,7 +57,7 @@ const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
         try {
             const USER_ID = 1;
 
-            const expenseDataToSubmit: CreateExpenseData = {
+            const expenseDataToSubmit: UpdateExpenseData = {
                 description: formData.description,
                 category: formData.category,
                 amount: parseFloat(formData.amount),
@@ -66,12 +66,11 @@ const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
                 notes: formData.notes
             };
 
-            const newExpense = await createGasto(expenseDataToSubmit);
-            setFormData(initialFormData);
-            onExpenseCreated(newExpense); 
+            const updatedExpense = await updateExpense(expenseToEdit.id, expenseDataToSubmit);
+            onExpenseUpdated(updatedExpense);
 
         } catch (error) {
-            console.error('Error al crear gasto:', error);
+            console.error('Error al actualizar gasto:', error);
         }
     };
 
@@ -86,13 +85,13 @@ const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
         >
             <Form onSubmit={handleSubmit}>
                 <Modal.Header closeButton={!loading}>
-                    <Modal.Title as="h2">Cargar Gasto</Modal.Title>
+                    <Modal.Title as="h2">Editar Gasto</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
                     {error && (
                         <Alert variant="danger">
-                            Error al crear gasto: {error}
+                            Error al actualizar gasto: {error}
                         </Alert>
                     )}
 
@@ -105,7 +104,6 @@ const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
                                 <Form.Control
                                     type="text"
                                     name="description"
-                                    placeholder="Ej: Pago factura de luz, Compra de..."
                                     value={formData.description}
                                     onChange={handleInputChange}
                                     required
@@ -120,28 +118,30 @@ const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
                                 <Form.Control
                                     type="number"
                                     name="amount"
-                                    placeholder="Ej: 15000"
                                     value={formData.amount}
                                     onChange={handleInputChange}
                                     required
                                     disabled={loading}
                                     step="0.01"
-                                    min="0.01" 
+                                    min="0.01"
                                 />
                             </Form.Group>
                         </Col>
 
                         <Col md={6}>
                             <Form.Group className="mb-3" controlId="formGastoCategory">
-                                <Form.Label>
+                                <Form.Label htmlFor="edit-gasto-category">
                                     Categoría <span className="text-danger">*</span>
                                 </Form.Label>
                                 <Form.Select
+                                    id="edit-gasto-category"
                                     name="category"
                                     value={formData.category}
                                     onChange={handleInputChange}
                                     required
+                                    title="Categoría del gasto"
                                     disabled={loading}
+                                    aria-label="Categoría del gasto"
                                 >
                                     {categories.map((category, index) => (
                                         <option key={index} value={category}>
@@ -199,24 +199,17 @@ const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
                         Cancelar
                     </Button>
                     <Button
-                        variant="success"
+                        variant="primary"
                         type="submit"
                         disabled={loading}
                     >
                         {loading ? (
                             <>
-                                <Spinner
-                                    as="span"
-                                    animation="border"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                    className="me-2"
-                                />
-                                Creando...
+                                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                Guardando...
                             </>
                         ) : (
-                            'Crear Gasto'
+                            'Guardar Cambios'
                         )}
                     </Button>
                 </Modal.Footer>
@@ -225,4 +218,4 @@ const CreateGasto = ({ onClose, onExpenseCreated }: Props) => {
     );
 };
 
-export default CreateGasto;
+export default EditGasto;
