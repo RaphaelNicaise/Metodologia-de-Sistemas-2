@@ -32,7 +32,7 @@ const Navbar = () => {
                     VENTAS
                 </h3>
                 <div className="app-sidebar-links">
-                    <Nav.Link href="#ventas" className="app-nav-link">
+                    <Nav.Link href="/ventas" className="app-nav-link">
                         <FaShoppingCart className="app-nav-icon"/>
                         <span>Registrar ventas</span>
                     </Nav.Link>
