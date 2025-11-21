@@ -1,0 +1,204 @@
+/* Layout general */
+.pos-layout {
+  display: flex;
+  height: calc(100vh - 90px);
+  overflow: hidden;
+  background-color: #e0e0e0;
+}
+
+.pos-main-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.pos-container {
+  width: 100%;
+  max-width: 800px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* SECCIÓN 1: ESCÁNER */
+.scanner-section {
+  background: #1c3c7d; 
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.scanner-title {
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.scanner-input-wrapper {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.scanner-input {
+  width: 100%;
+  padding: 15px 20px;
+  padding-right: 50px; 
+  font-size: 1.2rem;
+  border-radius: 30px;
+  border: 2px solid #4a6aa7;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.scanner-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.scanner-input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
+/* SECCIÓN 2: LISTA DE CARRITO */
+.cart-section {
+  flex: 1;
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.cart-header-pos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.cart-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 400px;
+  padding-right: 5px;
+}
+
+/* Item del Carrito (Estilo Tarjeta) */
+.cart-item-card {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border: 1px solid #e9ecef;
+  transition: transform 0.2s;
+}
+
+.cart-item-card:hover {
+  border-color: #1c3c7d;
+  transform: translateX(5px);
+}
+
+.item-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 5px;
+  background: white;
+  padding: 2px;
+  margin-right: 15px;
+  border: 1px solid #ddd;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.item-price {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.item-subtotal {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #198754; 
+  min-width: 100px;
+  text-align: right;
+}
+
+/* SECCIÓN 3: TOTAL Y ACCIÓN */
+.checkout-section {
+  background: #1c3c7d;
+  border-radius: 15px;
+  padding: 20px 30px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+}
+
+.total-label {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.total-amount {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.checkout-btn {
+  background-color: #198754;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.checkout-btn:hover:not(:disabled) {
+  background-color: #146c43;
+  transform: scale(1.05);
+}
+
+.checkout-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}

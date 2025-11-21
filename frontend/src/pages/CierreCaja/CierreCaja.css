@@ -1,0 +1,26 @@
+/* frontend/src/pages/CierreCaja/CierreCaja.css */
+
+.summary-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #6c757d; /* text-muted */
+    text-transform: uppercase;
+}
+
+.summary-card .card-text {
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+
+/* Colores específicos para las tarjetas de resumen */
+.summary-card.text-success .card-text {
+    color: #198754 !important;
+}
+
+.summary-card.text-danger .card-text {
+    color: #dc3545 !important;
+}
+
+.summary-card.text-info .card-text {
+    color: #0dcaf0 !important;
+}

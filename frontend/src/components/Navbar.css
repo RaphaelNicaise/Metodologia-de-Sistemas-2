@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.app-sidebar {
+  width: 280px;
+  padding: 20px 0; 
+  font-family: "Roboto Condensed", sans-serif; 
+}
+
+
+.app-sidebar-section {
+  margin-bottom: 20px;
+  padding: 0 15px;
+}
+
+
+.app-sidebar-title {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-left: 10px;
+}
+
+.app-sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; 
+}
+
+
+.app-nav-link {
+  display: flex !important; 
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px !important; 
+  text-decoration: none;
+  color: #2c3e50 !important; 
+  border-radius: 8px !important; 
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+
+.app-nav-link:hover {
+  background-color: #e9ecef;
+  transform: translateX(2px); 
+  color: #2c3e50 !important;
+}
+
+.app-nav-icon {
+  font-size: 18px;
+  color: #6c757d;
+  min-width: 20px;
+  display: flex;
+  justify-content: center;
+}

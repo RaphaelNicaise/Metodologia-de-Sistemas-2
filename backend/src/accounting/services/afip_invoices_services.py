@@ -1,5 +1,3 @@
-# src/accounting/services/afip_invoices.py
-
 from src.accounting.models.afip_invoices import AFIPInvoice
 from src.db import Database
 from datetime import datetime, timedelta
@@ -17,11 +15,12 @@ class AFIPInvoiceService:
         ORDER BY ai.id DESC
         LIMIT %s OFFSET %s
         """
-        results = self.db.execute(query, (limit, offset))
+        cursor = self.db.execute(query, (limit, offset))
+        results = cursor.fetchall() 
         invoices = []
         for row in results:
             invoice = AFIPInvoice(**{k: v for k, v in row.items() 
-                                   if k in ['id', 'sale_id', 'cae', 'cae_expiration', 'invoice_type', 'invoice_number']})
+                                    if k in ['id', 'sale_id', 'cae', 'cae_expiration', 'invoice_type', 'invoice_number']})
             invoice_dict = invoice.to_dict()
             invoice_dict.update({
                 'total_amount': row.get('total_amount'),
@@ -29,6 +28,7 @@ class AFIPInvoiceService:
                 'payment_method': row.get('payment_method')
             })
             invoices.append(invoice_dict)
+        cursor.close()  
         return invoices
 
     def get_invoice_by_id(self, invoice_id):
@@ -41,6 +41,8 @@ class AFIPInvoiceService:
         """
         cursor = self.db.execute(query, (invoice_id,))
         row = cursor.fetchone()
+        cursor.close()  
+        
         if row:
             invoice = AFIPInvoice(**{k: v for k, v in row.items() 
                 if k in ['id', 'sale_id', 'cae', 'cae_expiration', 'invoice_type', 'invoice_number']})
@@ -66,7 +68,8 @@ class AFIPInvoiceService:
 
         try:
             # Iniciar transacción
-            self.db.connection.start_transaction()
+            # (Nota: La gestión de transacciones complejas con cursores 
+            # individuales puede ser delicada, pero la cerraremos)
             
             # Crear la factura AFIP
             query = """
@@ -83,18 +86,20 @@ class AFIPInvoiceService:
             
             cursor = self.db.execute(query, params)
             invoice_id = cursor.lastrowid
+            cursor.close()   
             
             # Marcar la venta como facturada
             update_query = "UPDATE sales SET invoice_state = 'facturado' WHERE id = %s"
-            self.db.execute(update_query, (data.get("sale_id"),))
+            cursor2 = self.db.execute(update_query, (data.get("sale_id"),))
+            cursor2.close() 
             
             # Confirmar transacción
-            self.db.connection.commit()
+            self.db.conn.commit()
             
             return self.get_invoice_by_id(invoice_id)
             
         except Exception as e:
-            self.db.connection.rollback()
+            self.db.conn.rollback()
             print(f"Error creando factura AFIP: {e}")
             return None
 
@@ -110,8 +115,11 @@ class AFIPInvoiceService:
         GROUP BY s.id
         ORDER BY s.sale_date ASC
         """
-        results = self.db.execute(query)
-        return [dict(row) for row in results]
+        cursor = self.db.execute(query)
+        results = cursor.fetchall() 
+        pending_sales = [dict(row) for row in results]
+        cursor.close()  
+        return pending_sales
 
     def get_invoices_by_date_range(self, start_date, end_date):
         """Obtiene facturas en un rango de fechas"""
@@ -122,7 +130,8 @@ class AFIPInvoiceService:
         WHERE DATE(s.sale_date) BETWEEN %s AND %s
         ORDER BY s.sale_date DESC
         """
-        results = self.db.execute(query, (start_date, end_date))
+        cursor = self.db.execute(query, (start_date, end_date))
+        results = cursor.fetchall() 
         invoices = []
         for row in results:
             invoice = AFIPInvoice(**{k: v for k, v in row.items() 
@@ -134,6 +143,7 @@ class AFIPInvoiceService:
                 'payment_method': row.get('payment_method')
             })
             invoices.append(invoice_dict)
+        cursor.close()  
         return invoices
 
     def get_invoices_by_type(self, invoice_type):
@@ -145,11 +155,12 @@ class AFIPInvoiceService:
         WHERE ai.invoice_type = %s
         ORDER BY ai.invoice_number DESC
         """
-        results = self.db.execute(query, (invoice_type,))
+        cursor = self.db.execute(query, (invoice_type,))
+        results = cursor.fetchall() 
         invoices = []
         for row in results:
             invoice = AFIPInvoice(**{k: v for k, v in row.items() 
-                            if k in ['id', 'sale_id', 'cae', 'cae_expiration', 'invoice_type', 'invoice_number']})
+                                    if k in ['id', 'sale_id', 'cae', 'cae_expiration', 'invoice_type', 'invoice_number']})
             invoice_dict = invoice.to_dict()
             invoice_dict.update({
                 'total_amount': row.get('total_amount'),
@@ -157,6 +168,7 @@ class AFIPInvoiceService:
                 'payment_method': row.get('payment_method')
             })
             invoices.append(invoice_dict)
+        cursor.close()  
         return invoices
 
     def get_expired_caes(self):
@@ -169,7 +181,8 @@ class AFIPInvoiceService:
         ORDER BY ai.cae_expiration ASC
         """
         expiration_limit = datetime.now().date() + timedelta(days=7)  # Próximos 7 días
-        results = self.db.execute(query, (expiration_limit,))
+        cursor = self.db.execute(query, (expiration_limit,))
+        results = cursor.fetchall() 
         invoices = []
         for row in results:
             invoice = AFIPInvoice(**{k: v for k, v in row.items() 
@@ -181,6 +194,7 @@ class AFIPInvoiceService:
                 'payment_method': row.get('payment_method')
             })
             invoices.append(invoice_dict)
+        cursor.close()  
         return invoices
 
     def bulk_create_invoices(self, invoices_data):
@@ -189,7 +203,7 @@ class AFIPInvoiceService:
         failed_invoices = []
         
         for invoice_data in invoices_data:
-            invoice = self.create_invoice(invoice_data)
+            invoice = self.create_invoice(invoice_data) # create_invoice ya cierra sus cursores
             if invoice:
                 created_invoices.append(invoice)
             else:
@@ -211,11 +225,13 @@ class AFIPInvoiceService:
         query = "SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total FROM sales WHERE invoice_state = 'pendiente'"
         cursor = self.db.execute(query)
         pending_result = cursor.fetchone()
+        cursor.close()  
         
         # Total de ventas facturadas
         query = "SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total FROM sales WHERE invoice_state = 'facturado'"
         cursor = self.db.execute(query)
         invoiced_result = cursor.fetchone()
+        cursor.close()  
         
         # Facturas por tipo
         query = """
@@ -225,8 +241,10 @@ class AFIPInvoiceService:
         GROUP BY invoice_type
         ORDER BY count DESC
         """
-        results = self.db.execute(query)
+        cursor = self.db.execute(query)
+        results = cursor.fetchall() 
         by_type = [dict(row) for row in results]
+        cursor.close()  
         
         return {
             "pending_invoices": {
@@ -242,6 +260,7 @@ class AFIPInvoiceService:
 
     def _validate_invoice_data(self, data):
         """Valida los datos de la factura"""
+        # (No hay llamadas a la DB aquí)
         required_fields = ["sale_id", "cae", "cae_expiration", "invoice_type", "invoice_number"]
         for field in required_fields:
             if not data.get(field):
@@ -262,6 +281,7 @@ class AFIPInvoiceService:
         query = "SELECT invoice_state FROM sales WHERE id = %s"
         cursor = self.db.execute(query, (sale_id,))
         result = cursor.fetchone()
+        cursor.close()  
         
         if not result:
             return False  # Venta no existe
@@ -277,6 +297,7 @@ class AFIPInvoiceService:
         """
         cursor = self.db.execute(query, (invoice_type,))
         result = cursor.fetchone()
+        cursor.close()  
         
         max_number = result["max_number"] if result and result["max_number"] else 0
         return str(max_number + 1).zfill(8)  # Formato: 00000001

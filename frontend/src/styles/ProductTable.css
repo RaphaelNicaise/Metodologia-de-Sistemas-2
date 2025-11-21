@@ -1,4 +1,3 @@
-/* Estilos para el contenedor de la tabla */
 .table-container {
     border-radius: 1px;
     overflow: hidden;
@@ -10,7 +9,6 @@
     min-width: 650px;
 }
 
-/* Estilos para los indicadores de ordenamiento */
 .sort-indicator {
     margin-left: 0.5rem;
     color: inherit;
@@ -52,14 +50,12 @@
     align-items: center;
 }
 
-/* Estilos para imágenes de productos */
 .product-image {
     width: 50px;
     height: 50px;
     object-fit: contain;
 }
 
-/* Estilos para botones de acción */
 .btn {
     display: flex;
     align-items: center;
@@ -99,7 +95,6 @@
     opacity: 0.5;
 }
 
-/* Estilos para el diálogo de confirmación */
 .delete-dialog {
     font-family: "Roboto Condensed", sans-serif;
 }
@@ -168,7 +163,6 @@
     cursor: not-allowed;
 }
 
-/* Estilos para el Snackbar/Alert */
 .custom-snackbar {
     font-family: "Roboto Condensed", sans-serif;
 }
@@ -197,12 +191,10 @@
     padding: 8px 0;
 }
 
-/* Estilos para el CircularProgress */
 .loading-spinner {
     color: #d32f2f;
 }
 
-/* Animaciones */
 @keyframes fadeIn {
     from {
         opacity: 0;
