@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from '../pages/Home'
 import Login from '../pages/Login';
 import Products from '../pages/Products/Products';
+import Sales from '../pages/Sales/Sales'
 import Dashboard from '../pages/Dashboard';
 import CierreCaja from '../pages/CierreCaja/CierreCaja';
 import Gastos from '../pages/Gastos/Gastos';
@@ -14,6 +15,7 @@ export function AppRouter() {
         <Route path='/' element={<Home/>}/>
         <Route path='/iniciar-sesion' element={<Login/>}/>
         <Route path='/productos' element={<Products/>}/>  
+        <Route path='/ventas' element={<Sales/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/cierre-caja' element={<CierreCaja/>}/>
         <Route path='/gastos' element={<Gastos/>}/>
