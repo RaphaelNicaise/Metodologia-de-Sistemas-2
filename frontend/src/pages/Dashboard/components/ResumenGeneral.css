@@ -1,0 +1,31 @@
+.summary-card {
+    border: none;
+    border-radius: 0.5rem;
+    /* 8px */
+    height: 100%;
+    /* Para que todas las tarjetas tengan la misma altura */
+}
+
+.summary-card .card-body {
+    padding: 1.25rem;
+    /* 20px */
+}
+
+.summary-card .card-title {
+    font-size: 0.9rem;
+    /* 14.4px */
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.summary-card .card-text {
+    font-size: 1.75rem;
+    /* 28px */
+}
+
+/* Estilos para los íconos de flechas */
+.summary-card .card-text svg {
+    margin-right: 0.25rem;
+    font-size: 1.25rem;
+    /* 20px */
+}
