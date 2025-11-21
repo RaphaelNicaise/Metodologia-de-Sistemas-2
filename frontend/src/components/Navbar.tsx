@@ -2,7 +2,7 @@ import { Nav } from 'react-bootstrap';
 import './Navbar.css';
 
 import { LuChartLine } from "react-icons/lu";
-import { FaBell, FaShoppingCart, FaWineBottle, FaCreditCard, FaCalendarAlt, FaUserTie } from "react-icons/fa";
+import { FaBell, FaShoppingCart, FaWineBottle, FaCreditCard, FaCalendarAlt, FaUserTie, FaCashRegister, FaMoneyBillWave } from "react-icons/fa";
 import { FaShop } from "react-icons/fa6";
 
 const Navbar = () => {
@@ -16,7 +16,7 @@ const Navbar = () => {
                 </h3>
                 <div className="app-sidebar-links">
 
-                    <Nav.Link href="#dashboard" className="app-nav-link">
+                    <Nav.Link href="/dashboard" className="app-nav-link">
                         <LuChartLine className="app-nav-icon"/>
                         <span>Dashboard</span>
                     </Nav.Link>
@@ -72,6 +72,15 @@ const Navbar = () => {
                         <FaCreditCard className="app-nav-icon"/>
                         <span>Métodos de Pago</span>
                     </Nav.Link>
+                    <Nav.Link href="/gastos" className="app-nav-link">
+                        <FaMoneyBillWave className="app-nav-icon"/>
+                        <span>Gastos</span>
+                    </Nav.Link>
+                    <Nav.Link href="/cierre-caja" className="app-nav-link">
+                        <FaCashRegister className="app-nav-icon"/>
+                        <span>Cierre de Caja</span>
+                    </Nav.Link>
+
                 </div>
             </div>
         </Nav>

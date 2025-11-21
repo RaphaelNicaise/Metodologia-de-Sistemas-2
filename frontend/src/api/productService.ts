@@ -13,6 +13,7 @@ export const createProductApi = async (
             'Content-type': 'application/json',
         },
         body: JSON.stringify(productData)
+        
     });
 
     const data = await res.json() as Product;

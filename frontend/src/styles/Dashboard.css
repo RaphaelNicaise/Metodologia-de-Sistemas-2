@@ -1,0 +1,12 @@
+.dashboard-container {
+    font-family: "Roboto Condensed", sans-serif;
+    background-color: #f4f6f8; /* Un fondo leggermente gris para el contenido */
+    /* Calcula la altura para que ocupe el resto de la pantalla menos el header */
+    min-height: calc(100vh - 90px); 
+}
+
+.dashboard-title {
+    font-size: 35px;
+    margin-bottom: 25px;
+    font-family: "Roboto Condensed", sans-serif;
+}
