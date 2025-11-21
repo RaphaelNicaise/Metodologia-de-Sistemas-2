@@ -42,7 +42,7 @@ class StockService:
         if product is None:
             return "NOT_FOUND"
         
-        current_stock = product[1]
+        current_stock = product['stock']
         
         # Verificar que hay stock suficiente
         if current_stock < quantity:
