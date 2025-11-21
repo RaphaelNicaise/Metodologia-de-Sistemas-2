@@ -3,7 +3,7 @@ from src.sales.models.sale_product import SaleProduct
 from src.products.services.products_service import ProductoService
 from src.products.services.stock_service import StockService
 from src.db import Database
-from src.utils.lock import db_lock
+from src.db_lock import db_lock
 from datetime import datetime
 
 class SaleService:

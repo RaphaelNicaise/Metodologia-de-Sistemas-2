@@ -1,7 +1,7 @@
 from src.products.models.product import Product
 import mysql.connector
 from src.db import Database
-from src.utils.lock import db_lock
+from src.db_lock import db_lock
 
 class ProductoService:
     def __init__(self):
