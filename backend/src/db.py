@@ -69,3 +69,6 @@ class Database:
             self.cursor.close()
         if self.conn:
             self.conn.close()
+
+    def get_connection(self):
+        return self.conn
