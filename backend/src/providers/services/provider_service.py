@@ -41,3 +41,8 @@ class ProviderService:
         except mysql.connector.IntegrityError as e:
             if e.errno == 1062:
                 return {"error": "DUPLICATE"}
+
+    def delete_provider(self, provider_id):
+        query = "DELETE FROM providers WHERE id = %s"
+        cursor = self.db.execute(query, (provider_id,))
+        return cursor.rowcount > 0

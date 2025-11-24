@@ -1,5 +1,10 @@
 ## Documentacion de API
 
+[Productos](#productos) | [Ventas](#ventas) | [Proveedores](#providers)
+
+
+### Productos
+
 | Método                                                                 | Endpoint                       | Descripción                                              | Documentación Específica                  |
 |------------------------------------------------------------------------|-------------------------------|----------------------------------------------------------|-------------------------------------------|
 | <span style="color:green;">**GET**</span>                             | `/api/productos`              | Obtiene una lista de productos.                          | [Ver detalles](#get-apiproductos)         |
@@ -12,8 +17,6 @@
 
 
 ---
-
-## Documentación específica de cada endpoint:
 
 ### <span style="color:green;">**GET**</span> `/api/productos`
 Obtiene la lista completa de productos.
@@ -172,7 +175,7 @@ Agrega stock a un producto y registra el movimiento.
 
 ---
 
-## Documentación de API - Ventas (Sales)
+### Ventas
 
 | Método                                                                 | Endpoint                       | Descripción                                              | Documentación Específica                  |
 |------------------------------------------------------------------------|-------------------------------|----------------------------------------------------------|-------------------------------------------|
@@ -189,7 +192,6 @@ Agrega stock a un producto y registra el movimiento.
 
 ---
 
-## Documentación específica - Ventas:
 
 ### <span style="color:blue;">**POST**</span> `/api/sales`
 Crea una venta completa con productos. El total se calcula automáticamente.
@@ -486,3 +488,5 @@ Elimina una venta y restaura automáticamente el stock de los productos vendidos
 - `404` si la venta no existe
 
 ---
+
+### Providers
