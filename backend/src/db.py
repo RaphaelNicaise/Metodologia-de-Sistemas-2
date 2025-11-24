@@ -15,19 +15,25 @@ print(f"PORT {os.getenv('MYSQL_PORT')}")
 # Conexión a la base de datos MySQL Singleton
 class Database:
     _instance = None  # atributo de clase para almacenar la única instancia
+    _testing_mode = False
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:  
             cls._instance = super(Database, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self, host=None, user="root", password=None, database=None, retries=5, delay=8):
+    def __init__(self,testing=False,host=None, user="root", password=None, database=None, retries=5, delay=8):
         # Inicializamos solo una vez
         if not hasattr(self, "initialized"):  
             self.host =  os.getenv("MYSQL_HOST","mysql")
             self.user = user
             self.password = os.getenv("MYSQL_ROOT_PASSWORD")
-            self.database = os.getenv("MYSQL_DATABASE")
+
+            if testing:
+                self.database = os.getenv("MYSQL_TEST_DATABASE")
+            else:
+                self.database = os.getenv("MYSQL_DATABASE")
+                
             self.retries = retries
             self.delay = delay
             self.conn = None

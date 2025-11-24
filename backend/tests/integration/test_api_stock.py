@@ -20,7 +20,7 @@ def test_add_stock_ok(client):
         "quantity": 10,
         "user_id": 1,
         "provider_id": None,
-        "notes": "Test ingreso"
+        "notes": "Movimiento test"
     }
     response = client.post("/api/productos/1/stock", json=body)
 
@@ -29,9 +29,6 @@ def test_add_stock_ok(client):
 
 def test_get_stock_movements_ok(client):
     # Primero agregamos stock para generar movimiento
-    body = {"quantity": 5, "user_id": 1, "notes": "Movimiento test"}
-    client.post("/api/productos/1/stock", json=body)
-
     # Ahora pedimos los movimientos
     response = client.get("/api/productos/1/stock")
 
@@ -40,7 +37,7 @@ def test_get_stock_movements_ok(client):
     assert isinstance(data, list)
     assert data[0]["movement_type"] == "ingreso"
     assert data[0]["quantity"] == 10
-    assert data[0]["notes"] == "Test ingreso"
+    assert data[0]["notes"] == "Movimiento test"
 
 
 def test_get_stock_movements_not_found(client):

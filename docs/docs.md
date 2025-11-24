@@ -1,7 +1,7 @@
 Sistema de Gestión Comercial para Kioscos y Supermercados
 
 # Stack tecnológico
-Flask, React, Node.js, Docker, MongoDB, MySQL, Git. 
+Flask, React, Node.js, Docker, MongoDB, MySQL, Git, Typescript. 
 
 # Módulo de Venta (Caja)
 

@@ -23,6 +23,32 @@ services:
     networks:
       - appnetwork
 
+  # contenedor de testing para el backend
+  # comando de ejecucion: docker-compose run --rm tests-backend pytest -v tests
+  tests-backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    environment:
+      - FLASK_ENV=testing
+      - FLASK_APP=src/app.py
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_TEST_DATABASE=${MYSQL_TEST_DATABASE}
+    depends_on:
+      - mysql
+    networks:
+      - appnetwork
+    profiles: ["testing"] # 
+    command: ["tail", "-f", "/dev/null"]
+
   frontend:
     build:
       context: ./frontend
@@ -69,6 +95,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./db/sql/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql    
       - ./db/sql/02-init_data.sql:/docker-entrypoint-initdb.d/02-init_data.sql
+      - ./db/sql/03-init_data_test.sql:/docker-entrypoint-initdb.d/03-init_data_test.sql
     networks:
       - appnetwork
 

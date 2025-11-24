@@ -13,12 +13,12 @@ def test_get_product_by_id(client):
 
 def test_post_product_existente(client):
     body = {
-    "name": "Auriculares Bluetooth",
-    "barcode": "1234567890123",
-    "price": 59.99,
-    "stock": 25,
-    "url_image": "",
-    "category": "Tecnologia"
+    "name": "Producto A",
+    "barcode": "253457892345",
+    "price": 19.99,
+    "stock": 100,
+    "url_image": "NULL",
+    "category": "'Alimentos'"
     }
 
     response = client.post("/api/productos/", json=body)
