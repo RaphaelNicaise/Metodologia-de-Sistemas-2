@@ -23,7 +23,7 @@ def create_app(testing: bool = False): # Funcion que usa patron factory
           app.config["DEBUG"] = False
 
      # inicializar servicios singleton con el patron builder
-     Database()  # instancia del cliente de MySQL
+     Database(testing=testing)  # instancia del cliente de MySQL
      if not testing:
           MinioClient() # instancia el singleton de MinIO
 

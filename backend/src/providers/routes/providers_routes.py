@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 
 from src.providers.services.provider_service import ProviderService
 
-providers_bp = Blueprint("providers", __name__, url_prefix="/proveedores")
+providers_bp = Blueprint("providers", __name__)
 p_service = ProviderService()
 
 @providers_bp.route("/", methods=["GET"])
@@ -29,3 +29,10 @@ def create_provider():
         return jsonify({"error": "Error al crear proveedor"}), 400
     
     return jsonify(result.to_dict()), 201
+
+@providers_bp.route("/<int:provider_id>", methods=["DELETE"])
+def delete_provider(provider_id):
+    success = p_service.delete_provider(provider_id)
+    if success:
+        return jsonify({"message": "Proveedor eliminado exitosamente"}), 200
+    return jsonify({"error": "Proveedor no encontrado"}), 404
