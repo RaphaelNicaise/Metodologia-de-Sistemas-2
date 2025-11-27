@@ -1,0 +1,97 @@
+.table-container {
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+.providers-table {
+  margin-bottom: 0;
+}
+
+.providers-table thead {
+  background-color: #f8f9fa;
+}
+
+.providers-table th {
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.providers-table td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.action-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+  font-size: 1.2rem;
+}
+
+.btn-edit {
+  color: #0d6efd;
+}
+
+.btn-edit:hover:not(.btn-disabled) {
+  color: #0a58ca;
+  transform: scale(1.1);
+}
+
+.btn-erase {
+  color: #dc3545;
+}
+
+.btn-erase:hover:not(.btn-disabled) {
+  color: #bb2d3b;
+  transform: scale(1.1);
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sortable-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sort-indicator {
+  margin-left: 8px;
+}
+
+.sort-arrow {
+  font-size: 0.8rem;
+}
+
+.sort-arrow.asc {
+  color: #0d6efd;
+}
+
+.sort-arrow.desc {
+  color: #0d6efd;
+}
+
+.sort-indicator-inactive {
+  display: flex;
+  flex-direction: column;
+  opacity: 0.3;
+}
+
+.sort-arrow-small {
+  font-size: 0.6rem;
+  line-height: 0.4;
+}

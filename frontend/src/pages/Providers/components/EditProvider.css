@@ -1,0 +1,21 @@
+.edit-provider-modal .modal-title {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.edit-provider-modal .form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.edit-provider-modal .btn {
+  padding: 0.5rem 1.5rem;
+}
+
+.edit-provider-modal .text-danger {
+  color: #dc3545;
+}
+
+.edit-provider-modal .text-muted {
+  color: #6c757d;
+}

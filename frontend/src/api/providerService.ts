@@ -1,22 +1,20 @@
-import type { Product, CreateProductData, DeleteResponse } from '../types/Product';
+import type { Provider, CreateProviderData, DeleteResponse } from '../types/provider';
 
-const API_URL = "http://localhost:5000/api/productos/";
+const API_URL = "http://localhost:5000/api/proveedores/";
 
-export const createProductApi = async (
-    productData: CreateProductData
-): Promise<Product> => {
-
+export const createProviderApi = async (
+    providerData: CreateProviderData
+): Promise<Provider> => {
     const res = await fetch(API_URL, {
         method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-type': 'application/json',
         },
-        body: JSON.stringify(productData)
-        
+        body: JSON.stringify(providerData)
     });
 
-    const data = await res.json() as Product;
+    const data = await res.json() as Provider;
 
     if (!res.ok) {
         throw new Error(`Error http: ${res.status} ${res.statusText}`);
@@ -24,11 +22,7 @@ export const createProductApi = async (
     return data;
 };
 
-
-export const getProductsApi = async (
-
-): Promise<Product[]> => {
-
+export const getProvidersApi = async (): Promise<Provider[]> => {
     const res = await fetch(API_URL, {
         method: "GET",
         headers: {
@@ -37,7 +31,7 @@ export const getProductsApi = async (
         credentials: 'omit'
     });
 
-    const data = await res.json() as Product[];
+    const data = await res.json() as Provider[];
 
     if (!res.ok) {
         throw new Error(`Error http: ${res.status} ${res.statusText}`);
@@ -46,21 +40,20 @@ export const getProductsApi = async (
     return data || [];
 };
 
-
-export const updateProductApi = async (
-    productId: number,
-    productData: Partial<CreateProductData>
-): Promise<Product> => {
-    const res = await fetch(`${API_URL}${productId}`, {
+export const updateProviderApi = async (
+    providerId: number,
+    providerData: Partial<CreateProviderData>
+): Promise<Provider> => {
+    const res = await fetch(`${API_URL}${providerId}`, {
         method: "PUT",
         headers: {
             'Accept': 'application/json',
             'Content-type': 'application/json',
         },
-        body: JSON.stringify(productData)
+        body: JSON.stringify(providerData)
     });
 
-    const data = await res.json() as Product;
+    const data = await res.json() as Provider;
 
     if (!res.ok) {
         throw new Error(`Error http: ${res.status} ${res.statusText}`);
@@ -68,17 +61,16 @@ export const updateProductApi = async (
     return data;
 };
 
-export const deleteProductApi = async (
-    productId: number
+export const deleteProviderApi = async (
+    providerId: number
 ): Promise<DeleteResponse> => {
-
-    if (!productId) {
-        const errorMsg = "Se requiere el ID del producto para eliminarlo";
+    if (!providerId) {
+        const errorMsg = "Se requiere el ID del proveedor para eliminarlo";
         console.error(errorMsg);
         throw new Error(errorMsg);
     }
 
-    const res = await fetch(`${API_URL}${productId}`, {
+    const res = await fetch(`${API_URL}${providerId}`, {
         method: "DELETE",
         headers: {
             'Accept': 'application/json',

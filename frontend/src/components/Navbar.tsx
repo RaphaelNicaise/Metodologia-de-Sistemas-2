@@ -20,10 +20,6 @@ const Navbar = () => {
                         <LuChartLine className="app-nav-icon"/>
                         <span>Dashboard</span>
                     </Nav.Link>
-                    <Nav.Link href="#notificaciones" className="app-nav-link">
-                        <FaBell className="app-nav-icon"/>
-                        <span>Notificaciones</span>
-                    </Nav.Link>
                 </div>
             </div>
             
@@ -48,6 +44,10 @@ const Navbar = () => {
                         <FaWineBottle className="app-nav-icon"/>
                         <span>Productos</span>
                     </Nav.Link>
+                    <Nav.Link href="/proveedores" className="app-nav-link">
+                        <FaShop className="app-nav-icon"/>
+                        <span>Proveedores</span>
+                    </Nav.Link>
                 </div>
             </div>
 
@@ -56,22 +56,6 @@ const Navbar = () => {
                     ADMINISTRACIÓN
                 </h3>
                 <div className="app-sidebar-links">
-                    <Nav.Link href="#sucursales" className="app-nav-link">
-                        <FaShop className="app-nav-icon"/>
-                        <span>Local</span>
-                    </Nav.Link>
-                    <Nav.Link href="#empleados" className="app-nav-link">
-                        <FaUserTie className="app-nav-icon"/>
-                        <span>Empleados</span>
-                    </Nav.Link>
-                    <Nav.Link href="#turnos" className="app-nav-link">
-                        <FaCalendarAlt className="app-nav-icon"/>
-                        <span>Turnos</span>
-                    </Nav.Link>
-                    <Nav.Link href="#pagos" className="app-nav-link">
-                        <FaCreditCard className="app-nav-icon"/>
-                        <span>Métodos de Pago</span>
-                    </Nav.Link>
                     <Nav.Link href="/gastos" className="app-nav-link">
                         <FaMoneyBillWave className="app-nav-icon"/>
                         <span>Gastos</span>
