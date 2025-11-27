@@ -24,8 +24,6 @@ type ProviderSortKey = 'name' | 'contact_email' | 'phone_number';
 const ProvidersTable = () => {
   const { providers, loading: loadingProviders, error } = useGetProviders();
 
-  console.log('ProvidersTable render:', { providers, loadingProviders, error });
-
   const [orderBy, setOrderBy] = useState<ProviderSortKey>('name');
   const [order, setOrder] = useState<Order>('asc');
   const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState>(null);

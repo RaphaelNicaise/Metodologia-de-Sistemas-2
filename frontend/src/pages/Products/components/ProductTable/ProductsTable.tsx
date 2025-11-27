@@ -3,6 +3,7 @@ import { Table, Card, Image, Button, Toast, ToastContainer, Alert } from 'react-
 import { MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import DeleteProductDialog from "./DeleteProductDialog";
+import EditProduct from "../EditProduct/EditProduct";
 import SortableHeader from "./SortableHeader";
 import './ProductTable.css';
 import useDeleteProduct from "../../../../hooks/useDeleteProduct";
@@ -30,6 +31,7 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
   const [orderBy, setOrderBy] = useState<ProductSortKey>('name');
   const [order, setOrder] = useState<Order>('asc');
   const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState>(null);
+  const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [snackbar, setSnackbar] = useState<SnackbarState>({
     open: false,
     message: '',
@@ -46,6 +48,14 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
 
   const handleDeleteClick = (productId: number, productName: string) => {
     setDeleteConfirm({ id: productId, name: productName });
+  };
+
+  const handleEditClick = (product: Product) => {
+    setEditProduct(product);
+  };
+
+  const closeEditModal = () => {
+    setEditProduct(null);
   };
 
   const confirmDelete = async () => {
@@ -155,8 +165,8 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
               </tr>
             </thead>
             <tbody>
-              {sortedProducts.map(({ id, name, barcode, price, stock, url_image, category }) => {
-                
+              {sortedProducts.map((product) => {
+                const { id, name, barcode, price, stock, url_image, category } = product;
                 const imageToShow = url_image || '/Image-not-found.png';
                 
                 return (
@@ -179,7 +189,7 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
                         <Button
                           variant="link" 
                           className={`action-btn btn-edit ${loading ? 'btn-disabled' : ''}`}
-                          onClick={() => onEdit && onEdit(id)}
+                          onClick={() => handleEditClick(product)}
                           title={loading ? "Espere..." : "Editar producto"}
                           disabled={loading}
                         >
@@ -203,6 +213,13 @@ const ProductsTable = ({ products = [], onEdit, onProductDeleted }: Props) => {
           </Table>
         </Card.Body>
       </Card>
+
+      {editProduct && (
+        <EditProduct
+          product={editProduct}
+          onClose={closeEditModal}
+        />
+      )}
 
       <DeleteProductDialog
         open={!!deleteConfirm}

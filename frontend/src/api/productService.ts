@@ -47,6 +47,27 @@ export const getProductsApi = async (
 };
 
 
+export const updateProductApi = async (
+    productId: number,
+    productData: Partial<CreateProductData>
+): Promise<Product> => {
+    const res = await fetch(`${API_URL}${productId}`, {
+        method: "PUT",
+        headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+        },
+        body: JSON.stringify(productData)
+    });
+
+    const data = await res.json() as Product;
+
+    if (!res.ok) {
+        throw new Error(`Error http: ${res.status} ${res.statusText}`);
+    }
+    return data;
+};
+
 export const deleteProductApi = async (
     productId: number
 ): Promise<DeleteResponse> => {
