@@ -30,6 +30,19 @@ def create_provider():
     
     return jsonify(result.to_dict()), 201
 
+@providers_bp.route("/<int:provider_id>", methods=["PUT"])
+def update_provider(provider_id):
+    data = request.get_json()
+    result = p_service.update_provider(provider_id, data)
+
+    if not result:
+        return jsonify({"error": "Proveedor no encontrado"}), 404
+    
+    if isinstance(result, dict) and result.get("error"):
+        return jsonify(result), 400
+    
+    return jsonify(result.to_dict()), 200
+
 @providers_bp.route("/<int:provider_id>", methods=["DELETE"])
 def delete_provider(provider_id):
     success = p_service.delete_provider(provider_id)

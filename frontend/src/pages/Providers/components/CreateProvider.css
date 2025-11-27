@@ -1,0 +1,27 @@
+.create-provider-modal .modal-title {
+  font-weight: 600;
+  color: #212529;
+}
+
+.create-provider-modal .form-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.create-provider-modal .text-danger {
+  color: #dc3545;
+}
+
+.create-provider-modal .text-muted {
+  font-size: 0.875rem;
+}
+
+.create-provider-modal .modal-footer {
+  border-top: 1px solid #dee2e6;
+  padding: 1rem;
+}
+
+.create-provider-modal .btn {
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+}

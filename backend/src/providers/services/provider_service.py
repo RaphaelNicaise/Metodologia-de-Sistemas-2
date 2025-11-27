@@ -42,6 +42,33 @@ class ProviderService:
             if e.errno == 1062:
                 return {"error": "DUPLICATE"}
 
+    def update_provider(self, provider_id, data):
+        # Verificar si el proveedor existe
+        existing = self.get_provider_by_id(provider_id)
+        if not existing:
+            return None
+        
+        query = """
+        UPDATE providers 
+        SET name = %s, description = %s, phone_number = %s, contact_email = %s, address = %s
+        WHERE id = %s
+        """
+        params = (
+            data.get("name", existing.name),
+            data.get("description", existing.description),
+            data.get("phone_number", existing.phone_number),
+            data.get("contact_email", existing.contact_email),
+            data.get("address", existing.address),
+            provider_id
+        )
+        try:
+            self.db.execute(query, params)
+            return self.get_provider_by_id(provider_id)
+        except mysql.connector.IntegrityError as e:
+            if e.errno == 1062:
+                return {"error": "DUPLICATE"}
+            return {"error": str(e)}
+
     def delete_provider(self, provider_id):
         query = "DELETE FROM providers WHERE id = %s"
         cursor = self.db.execute(query, (provider_id,))
