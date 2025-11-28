@@ -91,3 +91,22 @@ export const deleteProductApi = async (
     }
     return { success: true };
 };
+
+export const uploadImageApi = async (imageFile: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    const res = await fetch(`${API_URL}upload-image`, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || `Error http: ${res.status} ${res.statusText}`);
+    }
+
+    const data = await res.json() as { url: string };
+    // Retornar URL completa del backend
+    return `http://localhost:5000${data.url}`;
+};

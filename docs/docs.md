@@ -1,5 +1,8 @@
 Sistema de Gestión Comercial para Kioscos y Supermercados
 
+## Api Docs -> [Ver aca](doc_api.md)
+## Instalación y Configuración  [Ver aca](doc_tecnica.md)
+
 # Stack tecnológico
 Flask, React, Node.js, Docker, MongoDB, MySQL, Git, Typescript. 
 

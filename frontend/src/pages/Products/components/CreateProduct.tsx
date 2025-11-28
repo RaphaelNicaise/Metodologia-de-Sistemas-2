@@ -11,6 +11,7 @@ import {
   CloseButton
 } from 'react-bootstrap';
 import useCreateProduct from "../../../hooks/useCreateProduct";
+import { uploadImageApi } from "../../../api/productService";
 import type { CreateProductData } from "../../../types/Product";
 import './CreateProduct.css';
 
@@ -81,13 +82,25 @@ const CreateProduct = ({ onClose }: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      let imageUrl = '';
+
+      // Si se seleccionó una imagen, subirla primero
+      if (images.length > 0) {
+        try {
+          imageUrl = await uploadImageApi(images[0]);
+        } catch (error) {
+          console.error('Error subiendo imagen:', error);
+          throw new Error('Error al subir la imagen');
+        }
+      }
+
       const productDataToSubmit: CreateProductData = {
         name: formData.name,
         barcode: formData.barcode,
         category: formData.category,
         price: parseFloat(formData.price),
         stock: parseInt(formData.stock) || 0,
-        url_image: images.length > 0 ? images[0].name : ''
+        url_image: imageUrl
       };
       
       await createProduct(productDataToSubmit);

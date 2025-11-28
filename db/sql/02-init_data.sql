@@ -8,9 +8,9 @@ INSERT INTO providers (name, contact_email, phone_number, address, description) 
 
 -- Productos
 INSERT INTO products (name, price, stock, barcode, url_image, category) VALUES
-('Producto A', 19.99, 100, '253457892345', NULL, 'Alimentos'),
-('Producto B', 29.99, 200, '724385270352', NULL, 'Electronicas'),
-('Producto C', 19.99, 150, '389543207459', NULL, 'Bebidas');
+('Producto A', 19.99, 100, '253457892345', "http://localhost:5000/uploads/01720d9e-07cb-4361-945e-a9f59c2779fe.webp", 'Alimentos'),
+('Producto B', 29.99, 200, '724385270352', "http://localhost:5000/uploads/5cde871b-715c-4f47-9946-5769be51ab70.jpg", 'Electronicas'),
+('Producto C', 19.99, 150, '389543207459', "http://localhost:5000/uploads/2d316117-5597-4776-a034-22761f7885a9.jpg", 'Bebidas');
 
 -- Usuario admin
 INSERT INTO users (name, email, password, role) VALUES
