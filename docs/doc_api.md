@@ -1,6 +1,6 @@
 ## Documentacion de API
 
-[Productos](#productos) | [Ventas](#ventas) | [Proveedores](#providers)
+[Productos](#productos) | [Ventas](#ventas) | [Proveedores](#providers) | [Cierres de Caja](#cash-closures) | [Gastos](#expenses)
 
 
 ### Productos
@@ -490,6 +490,7 @@ Elimina una venta y restaura automáticamente el stock de los productos vendidos
 ---
 
 ### Providers
+
 
 
 

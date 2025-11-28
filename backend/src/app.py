@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, send_from_directory
+import os
 
 from src.accounting.routes import accounting_bp
 from src.configuration.routes.config_routes import config_bp
@@ -28,6 +29,11 @@ def create_app(testing: bool = False): # Funcion que usa patron factory
           MinioClient() # instancia el singleton de MinIO
 
      CORS(app)
+
+     # Servir archivos estáticos desde la carpeta uploads
+     @app.route('/uploads/<path:filename>')
+     def uploaded_file(filename):
+          return send_from_directory('/app/uploads', filename)
 
      # register blueprints
      app.register_blueprint(accounting_bp, url_prefix="/api/contabilidad")

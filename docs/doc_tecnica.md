@@ -10,7 +10,7 @@ Levantar contenedores:
 ```bash
 docker compose up --build -d
 ```
-Lista de servicios:
+Lista de servicios:`
 - backend: API REST con Flask. (PORT=5000)
 - frontend: Front end con React. (PORT=5173) 
 - minio: Almacenamiento de objetos. (PORT=9000 & 9001)
@@ -19,7 +19,7 @@ Lista de servicios:
 
 ---
 Crear archivo `.env` de configuración a partir de
-[.env.template](.env.template.env) para las variables de entorno.
+[.env.template](.env.template) para las variables de entorno.
 
 Testing (con los contenedores levantados):
 Se crea un contenedor de backend temporal para los tests, este esta en profile testing por lo que no se ejecuta en el docker compose up normal. Solo se ejecuta si corremos este comando.

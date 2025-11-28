@@ -1,4 +1,7 @@
 from flask import Blueprint, jsonify, request
+import os
+import uuid
+from werkzeug.utils import secure_filename
 
 from src.products.services.products_service import ProductoService
 from src.products.services.stock_service import StockService
@@ -6,6 +9,12 @@ from src.products.services.stock_service import StockService
 products_bp = Blueprint("products", __name__)
 p_service = ProductoService()
 s_service = StockService()
+
+UPLOAD_FOLDER = '/app/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @products_bp.route("/", methods=["GET"])
 def get_products():
@@ -31,6 +40,40 @@ def create_product():
         return jsonify({"error": "Error al crear producto"}), 400
     
     return jsonify(result.to_dict()), 201 # devuelve el producto creado con su ID
+
+@products_bp.route("/upload-image", methods=["POST"])
+def upload_image():
+    """Endpoint para subir imágenes de productos"""
+    try:
+        if 'image' not in request.files:
+            return jsonify({"error": "No se envió ninguna imagen"}), 400
+        
+        file = request.files['image']
+        
+        if file.filename == '':
+            return jsonify({"error": "Nombre de archivo vacío"}), 400
+        
+        if not allowed_file(file.filename):
+            return jsonify({"error": "Tipo de archivo no permitido"}), 400
+        
+        # Crear carpeta uploads si no existe
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        
+        # Generar nombre único
+        extension = file.filename.rsplit('.', 1)[1].lower()
+        unique_filename = f"{uuid.uuid4()}.{extension}"
+        filepath = os.path.join(UPLOAD_FOLDER, unique_filename)
+        
+        # Guardar archivo
+        file.save(filepath)
+        
+        # Retornar URL relativa
+        image_url = f"/uploads/{unique_filename}"
+        
+        return jsonify({"url": image_url}), 200
+        
+    except Exception as e:
+        return jsonify({"error": f"Error al subir imagen: {str(e)}"}), 500
 
 
 @products_bp.route("/<int:product_id>", methods=["PUT"])

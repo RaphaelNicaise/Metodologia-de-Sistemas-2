@@ -11,6 +11,7 @@ import {
   CloseButton
 } from 'react-bootstrap';
 import useUpdateProduct from "../../../../hooks/useEditProduct";
+import { uploadImageApi } from "../../../../api/productService";
 import type { Product, CreateProductData } from "../../../../types/Product";
 import './EditProduct.css';
 
@@ -93,13 +94,25 @@ const EditProduct = ({ product, onClose }: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      let imageUrl = currentImage;
+
+      // Si se seleccionó una nueva imagen, subirla primero
+      if (images.length > 0) {
+        try {
+          imageUrl = await uploadImageApi(images[0]);
+        } catch (error) {
+          console.error('Error subiendo imagen:', error);
+          throw new Error('Error al subir la imagen');
+        }
+      }
+
       const productDataToSubmit: Partial<CreateProductData> = {
         name: formData.name,
         barcode: formData.barcode,
         price: formData.price,
         stock: formData.stock,
         category: formData.category,
-        url_image: images.length > 0 ? images[0].name : (currentImage || undefined)
+        url_image: imageUrl
       };
       
       await updateProduct(product.id, productDataToSubmit);

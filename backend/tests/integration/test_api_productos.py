@@ -17,7 +17,7 @@ def test_post_product_existente(client):
     "barcode": "253457892345",
     "price": 19.99,
     "stock": 100,
-    "url_image": "NULL",
+    "url_image": "http://localhost:5000/uploads/01720d9e-07cb-4361-945e-a9f59c2779fe.webp",
     "category": "'Alimentos'"
     }
 
